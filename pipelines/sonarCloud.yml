@@ -29,7 +29,7 @@ resources:
 name: $(date:yyyyMMdd)$(rev:.r)
 
 steps:
-  - templates: sonarCloud/terraform.yml@DevSecOps_Templates
+  - template: sonarCloud/terraform.yml@DevSecOps_Templates
     parameters:
       jdkVersion: ${{ parameters.jdkVersion }}
       sonarCloudProjectName: ${{ parameters.sonarCloudProjectName }}
