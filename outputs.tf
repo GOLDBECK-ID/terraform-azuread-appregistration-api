@@ -1,15 +1,15 @@
 output "appregistration_client_id" {
-  value     = azuread_application.adappregistration.application_id
+  value     = azuread_application.adappregistration.client_id
   sensitive = false
 }
 
 output "appregistration_client_secret" {
-  value     = azuread_service_principal_password.ad_service_principal_password.value
+  value     = azuread_application_password.ad_application_password.value
   sensitive = true
 }
 
 output "client_id" {
-  value = azuread_application.adappregistration.application_id
+  value = azuread_application.adappregistration.client_id
 }
 
 output "identifier_uris" {
