@@ -24,7 +24,7 @@ resources:
   - repository: DevSecOps_Templates
     name: DevSecOps/templates
     type: git
-    ref: dev
+    ref: main
 
 name: $(date:yyyyMMdd)$(rev:.r)
 
