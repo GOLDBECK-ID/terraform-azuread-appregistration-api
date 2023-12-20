@@ -70,6 +70,10 @@ resource "azuread_application" "adappregistration" {
   }
 }
 
+resource "azuread_service_principal" "ad_service_principal" {
+  client_id = azuread_application.adappregistration.client_id
+}
+
 resource "azuread_application_password" "ad_application_password" {
   application_id = azuread_application.adappregistration.id
   display_name   = "gb-${var.name}-${var.environment}-secret"
