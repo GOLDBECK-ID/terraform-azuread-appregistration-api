@@ -1,5 +1,3 @@
-resource "random_uuid" "app_reg_uuid_user_impersonation" {}
-
 data "azuread_group" "adgroup" {
   display_name = "AZU_${upper(var.name)}-App-${title(var.environment)}_Contributor"
 }
@@ -55,7 +53,7 @@ resource "azuread_application" "adappregistration" {
         admin_consent_display_name = "Allow the application to access (gb-${lower(var.name)}-${var.resourceIdentifier}-${var.environment}) on behalf of the signed-in user."
         admin_consent_description  = "Access api (gb-${lower(var.name)}-${var.resourceIdentifier}-${var.environment})"
         enabled                    = true
-        id                         = random_uuid.app_reg_uuid_user_impersonation.result
+        id                         = var.random_uuid_app_reg_user_impersonation_result
         type                       = "User"
         user_consent_description   = "Allow the application to access the api on your behalf."
         user_consent_display_name  = "Access gb-${lower(var.name)}-${var.resourceIdentifier}-${var.environment}"
@@ -75,10 +73,4 @@ resource "azuread_application_password" "ad_application_password" {
   application_id = azuread_application.adappregistration.id
   display_name   = "gb-${var.name}-${var.resourceIdentifier}-${var.environment}-secret"
   end_date       = var.client_secret_expiration_date
-}
-
-resource "azuread_application_pre_authorized" "pre_authorized_clients" {
-  application_id       = azuread_application.adappregistration.id
-  authorized_client_id = var.authorized_app_id
-  permission_ids       = [random_uuid.app_reg_uuid_user_impersonation.result]
 }

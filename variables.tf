@@ -1,6 +1,7 @@
-variable "authorized_app_id" {
-  description = "Authorized client application in settings 'Expose an API'"
-  default     = ""
+variable "random_uuid_app_reg_user_impersonation_result" {
+  description = "Random UUID Application Registry User Impersonation."
+  type        = string
+  default     = "random-uuid"
 }
 
 variable "name" {
