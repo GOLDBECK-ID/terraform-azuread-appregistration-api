@@ -11,6 +11,12 @@ data "azuread_group" "adgroup" {
 }
 
 resource "azuread_application" "adappregistration" {
+  description = <<EOT
+  Manages an application registration within Azure Active Directory.
+  
+  For a more lightweight alternative, please see the azuread_application_registration resource.
+  Please note that this resource should not be used together with the azuread_application_registration resource when managing the same application.
+  EOT
   display_name     = "gb-${var.name}-${var.environment}"
   identifier_uris  = var.is_frontend ? [] : ["api://gb-${lower(var.name)}-${var.environment}.azurewebsites.net"]
   owners           = var.owners
@@ -65,9 +71,7 @@ resource "azuread_application" "adappregistration" {
       }
     }
   }
-  lifecycle {
-    # ignore_changes = all
-  }
+  lifecycle {}
 }
 
 resource "azuread_service_principal" "ad_service_principal" {
