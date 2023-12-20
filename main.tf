@@ -4,13 +4,11 @@ data "azuread_group" "adgroup" {
   display_name = "AZU_${upper(var.name)}-App-${title(var.environment)}_Contributor"
 }
 
+# Manages an application registration within Azure Active Directory.
+# 
+# For a more lightweight alternative, please see the azuread_application_registration resource.
+# Please note that this resource should not be used together with the azuread_application_registration resource when managing the same application.
 resource "azuread_application" "adappregistration" {
-  description = <<EOT
-    Manages an application registration within Azure Active Directory.
-
-    For a more lightweight alternative, please see the azuread_application_registration resource.
-    Please note that this resource should not be used together with the azuread_application_registration resource when managing the same application.
-  EOT
   display_name     = "gb-${var.name}-${var.environment}"
   identifier_uris  = var.is_frontend ? [] : ["api://gb-${lower(var.name)}-${var.environment}.azurewebsites.net"]
   owners           = var.owners
@@ -68,8 +66,8 @@ resource "azuread_application" "adappregistration" {
   lifecycle {}
 }
 
+# Manages a service principal associated with an application within Azure Active Directory.
 resource "azuread_service_principal" "ad_service_principal" {
-  description = "Manages a service principal associated with an application within Azure Active Directory."
   client_id = azuread_application.adappregistration.client_id
 }
 
