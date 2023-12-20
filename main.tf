@@ -71,6 +71,7 @@ resource "azuread_application" "adappregistration" {
 }
 
 resource "azuread_service_principal" "ad_service_principal" {
+  description = "Manages a service principal associated with an application within Azure Active Directory."
   client_id = azuread_application.adappregistration.client_id
 }
 
