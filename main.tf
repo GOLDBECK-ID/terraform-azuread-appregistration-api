@@ -31,15 +31,17 @@ resource "azuread_application" "adappregistration" {
   }
 
   dynamic "required_resource_access" {
-    for_each = var.required_resource_access_map
+    for_each = var.required_resource_access
+    iterator = resource
     content {
-      resource_app_id = required_resource_access.value.resource_app_id
+      resource_app_id = resource.value.resource_app_id
 
       dynamic "resource_access" {
-        for_each = required_resource_access.value.resource_access_list
+        for_each = resource.value.resource_access
+        iterator = access
         content {
-          id   = resource_access.value.resource_access_id
-          type = resource_access.value.resource_access_type
+          id   = access.value.id
+          type = access.value.type
         }
       }
     }

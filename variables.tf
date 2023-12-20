@@ -80,20 +80,3 @@ variable "web_redirect_uris" {
   type    = list(string)
   default = []
 }
-
-variable "required_resource_access_map" {
-  description = <<EOT
-  A map of a collection of required_resource_access blocks as documented below. Each block supports the following:
-
-  [resource_access] (Required) A collection of resource_access blocks as documented below, describing OAuth2.0 permission scopes and app roles that the application requires from the specified resource.
-  [resource_app_id] (Required) The unique identifier for the resource that the application requires access to. This should be the Application ID of the target application.
-  EOT
-  type = list(object({
-    resource_app_id = string
-    resource_access_list = list(object({
-      resource_access_id   = string
-      resource_access_type = string
-    }))
-  }))
-  default = []
-}
