@@ -1,21 +1,3 @@
-# variable "client_id" {
-#   description = "The client ID for the application."
-#   type        = string
-#   default     = ""
-# }
-
-# variable "client_secret" {
-#   description = "The automatic generated client secret for the application."
-#   type        = string
-#   default     = ""
-# }
-
-# variable "tenant_id" {
-#   description = "The tenant ID of the tenant that is managing the resources, usually the service providers tenant."
-#   type        = string
-#   default     = ""
-# }
-
 variable "authorized_app_id" {
   description = "Authorized client application in settings 'Expose an API'"
   default     = ""
