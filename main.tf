@@ -9,8 +9,8 @@ data "azuread_group" "adgroup" {
 # For a more lightweight alternative, please see the azuread_application_registration resource.
 # Please note that this resource should not be used together with the azuread_application_registration resource when managing the same application.
 resource "azuread_application" "adappregistration" {
-  display_name     = "gb-${var.name}-${var.environment}"
-  identifier_uris  = var.is_frontend ? [] : ["api://gb-${lower(var.name)}-${var.environment}.azurewebsites.net"]
+  display_name     = "gb-${var.name}-${var.resourceIdentifier}-${var.environment}"
+  identifier_uris  = var.is_frontend ? [] : ["api://gb-${lower(var.name)}-${var.resourceIdentifier}-${var.environment}.azurewebsites.net"]
   owners           = var.owners
   sign_in_audience = var.sign_in_audience
 
@@ -20,7 +20,7 @@ resource "azuread_application" "adappregistration" {
       id_token_issuance_enabled = true
     }
   }
-  
+
   dynamic "single_page_application" {
     for_each = var.is_frontend ? [1] : []
     content {
@@ -52,13 +52,13 @@ resource "azuread_application" "adappregistration" {
       requested_access_token_version = 1
 
       oauth2_permission_scope {
-        admin_consent_display_name = "Allow the application to access (gb-${lower(var.name)}-${var.environment}) on behalf of the signed-in user."
-        admin_consent_description  = "Access api (gb-${lower(var.name)}-${var.environment})"
+        admin_consent_display_name = "Allow the application to access (gb-${lower(var.name)}-${var.resourceIdentifier}-${var.environment}) on behalf of the signed-in user."
+        admin_consent_description  = "Access api (gb-${lower(var.name)}-${var.resourceIdentifier}-${var.environment})"
         enabled                    = true
         id                         = random_uuid.app_reg_uuid_user_impersonation.result
         type                       = "User"
         user_consent_description   = "Allow the application to access the api on your behalf."
-        user_consent_display_name  = "Access gb-${lower(var.name)}-${var.environment}"
+        user_consent_display_name  = "Access gb-${lower(var.name)}-${var.resourceIdentifier}-${var.environment}"
         value                      = "user_impersonation"
       }
     }
@@ -73,7 +73,7 @@ resource "azuread_service_principal" "ad_service_principal" {
 
 resource "azuread_application_password" "ad_application_password" {
   application_id = azuread_application.adappregistration.id
-  display_name   = "gb-${var.name}-${var.environment}-secret"
+  display_name   = "gb-${var.name}-${var.resourceIdentifier}-${var.environment}-secret"
   end_date       = var.client_secret_expiration_date
 }
 

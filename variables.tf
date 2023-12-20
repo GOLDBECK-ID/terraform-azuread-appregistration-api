@@ -4,23 +4,30 @@ variable "authorized_app_id" {
 }
 
 variable "name" {
-  description = ""
+  description = "The name of the App Registration."
+  type        = string
+  default     = ""
+}
+
+variable "resourceIdentifier" {
+  description = "Identifier of the resource e.g. api or app."
+  type        = string
   default     = ""
 }
 
 variable "owners" {
   description = "IDs of the owner"
-  type = list(string)
-  default = [ "" ]
+  type        = list(string)
+  default     = [""]
 }
 
 variable "sign_in_audience" {
   description = <<EOT
-  The Microsoft account types that are supported for the current application.
-  Must be one of [AzureADMyOrg], [AzureADMultipleOrgs], [AzureADandPersonalMicrosoftAccount] or [PersonalMicrosoftAccount]. Defaults to AzureADMyOrg.
+    The Microsoft account types that are supported for the current application.
+    Must be one of [AzureADMyOrg], [AzureADMultipleOrgs], [AzureADandPersonalMicrosoftAccount] or [PersonalMicrosoftAccount]. Defaults to AzureADMyOrg.
   EOT
-  type = string
-  default = "AzureADMyOrg"
+  type        = string
+  default     = "AzureADMyOrg"
 }
 
 variable "environment" {
