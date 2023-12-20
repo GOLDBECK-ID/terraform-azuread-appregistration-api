@@ -1,9 +1,3 @@
-provider "azuread" {
-  client_id     = var.client_id
-  client_secret = var.client_secret
-  tenant_id     = var.tenant_id
-}
-
 resource "random_uuid" "app_reg_uuid_user_impersonation" {}
 
 data "azuread_group" "adgroup" {
@@ -12,10 +6,10 @@ data "azuread_group" "adgroup" {
 
 resource "azuread_application" "adappregistration" {
   description = <<EOT
-  Manages an application registration within Azure Active Directory.
-  
-  For a more lightweight alternative, please see the azuread_application_registration resource.
-  Please note that this resource should not be used together with the azuread_application_registration resource when managing the same application.
+    Manages an application registration within Azure Active Directory.
+
+    For a more lightweight alternative, please see the azuread_application_registration resource.
+    Please note that this resource should not be used together with the azuread_application_registration resource when managing the same application.
   EOT
   display_name     = "gb-${var.name}-${var.environment}"
   identifier_uris  = var.is_frontend ? [] : ["api://gb-${lower(var.name)}-${var.environment}.azurewebsites.net"]
