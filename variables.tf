@@ -1,17 +1,17 @@
 variable "client_id" {
-  description = ""
+  description = "The client ID for the application."
   type        = string
   default     = ""
 }
 
 variable "client_secret" {
-  description = ""
+  description = "The automatic generated client secret for the application."
   type        = string
   default     = ""
 }
 
 variable "tenant_id" {
-  description = ""
+  description = "The tenant ID of the tenant that is managing the resources, usually the service providers tenant."
   type        = string
   default     = ""
 }
@@ -33,12 +33,16 @@ variable "owners" {
 }
 
 variable "sign_in_audience" {
+  description = <<EOT
+  The Microsoft account types that are supported for the current application.
+  Must be one of [AzureADMyOrg], [AzureADMultipleOrgs], [AzureADandPersonalMicrosoftAccount] or [PersonalMicrosoftAccount]. Defaults to AzureADMyOrg.
+  EOT
   type = string
-  default = "sign_in_audience"
+  default = "AzureADMyOrg"
 }
 
 variable "environment" {
-  description = ""
+  description = "This variable specifies the current environment. Must be on of [dev],[test] or [prod]"
   default     = ""
 }
 
