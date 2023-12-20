@@ -1,0 +1,6 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "gbsw-development",
+        "projectKey": "gbsw-development_terraform-azuread-appregistration-api"
+    }
+}
