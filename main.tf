@@ -66,7 +66,8 @@ resource "azuread_application" "adappregistration" {
 
 # Manages a service principal associated with an application within Azure Active Directory.
 resource "azuread_service_principal" "ad_service_principal" {
-  client_id = azuread_application.adappregistration.client_id
+  client_id                    = azuread_application.adappregistration.client_id
+  app_role_assignment_required = var.azuread_service_principal_assignment_required
 }
 
 resource "azuread_application_password" "ad_application_password" {

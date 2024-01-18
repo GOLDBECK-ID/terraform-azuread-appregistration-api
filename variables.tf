@@ -74,3 +74,9 @@ variable "web_redirect_uris" {
   type    = list(string)
   default = []
 }
+
+variable "azuread_service_principal_assignment_required" {
+  description = "Whether this service principal requires an app role assignment to a user or group before Azure AD will issue a user or access token to the application. Defaults to false."
+  type        = bool
+  default     = false
+}
