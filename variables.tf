@@ -71,6 +71,8 @@ variable "required_resource_access" {
           type = string
       }))
   }))
+  default = null
+  nullable = true
 }
 variable "web_redirect_uris" {
   type    = list(string)
