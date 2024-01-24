@@ -19,11 +19,8 @@ resource "azuread_application" "adappregistration" {
     }
   }
 
-  dynamic "single_page_application" {
-    for_each = var.is_frontend ? [1] : []
-    content {
-      redirect_uris = var.spa_redirect_uris
-    }
+  single_page_application {
+    redirect_uris = var.redirect_uris
   }
 
   dynamic "required_resource_access" {
