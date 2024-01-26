@@ -71,5 +71,5 @@ resource "azuread_service_principal" "ad_service_principal" {
 resource "azuread_application_password" "ad_application_password" {
   application_id = azuread_application.adappregistration.id
   display_name   = "gb-${var.name}-${var.resourceIdentifier}-${var.environment}-secret"
-  end_date       = var.client_secret_expiration_date
+  end_date       = var.expiration_date
 }

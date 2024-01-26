@@ -20,6 +20,7 @@ variable "owners" {
   description = "IDs of the owner"
   type        = list(string)
   default     = [""]
+  nullable    = false
 }
 
 variable "sign_in_audience" {
@@ -36,8 +37,8 @@ variable "environment" {
   default     = ""
 }
 
-variable "client_secret_expiration_date" {
-  description = "the expiration date used for secrets etc."
+variable "expiration_date" {
+  description = "The expiration date used for secrets etc."
   type        = string
   default     = "2099-12-31T23:59:59Z"
 }
@@ -71,7 +72,7 @@ variable "required_resource_access" {
           type = string
       }))
   }))
-  default = null
+  default  = null
   nullable = true
 }
 variable "web_redirect_uris" {
