@@ -4,6 +4,8 @@ data "azuread_group" "adgroup" {
   display_name = "AZU_${data.azurerm_subscription.current.display_name}_Contributor"
 }
 
+resource "random_uuid" "app_reg_user_impersonation" {}
+
 # Manages an application registration within Azure Active Directory.
 # 
 # For a more lightweight alternative, please see the azuread_application_registration resource.
@@ -52,7 +54,7 @@ resource "azuread_application" "adappregistration" {
         admin_consent_display_name = "Allow the application to access (gb-${lower(var.name)}-${var.resourceIdentifier}-${var.environment}) on behalf of the signed-in user."
         admin_consent_description  = "Access api (gb-${lower(var.name)}-${var.resourceIdentifier}-${var.environment})"
         enabled                    = true
-        id                         = var.random_uuid_app_reg_user_impersonation_result
+        id                         = random_uuid.app_reg_user_impersonation.result
         type                       = "User"
         user_consent_description   = "Allow the application to access the api on your behalf."
         user_consent_display_name  = "Access gb-${lower(var.name)}-${var.resourceIdentifier}-${var.environment}"
