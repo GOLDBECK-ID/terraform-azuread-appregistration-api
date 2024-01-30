@@ -1,5 +1,7 @@
+data "azurerm_subscription" "current" {}
+
 data "azuread_group" "adgroup" {
-  display_name = "AZU_${upper(var.name)}-App-${title(var.environment)}_Contributor"
+  display_name = "AZU_${data.azurerm_subscription.current.display_name}_Contributor"
 }
 
 # Manages an application registration within Azure Active Directory.
