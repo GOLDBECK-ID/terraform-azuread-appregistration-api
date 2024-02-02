@@ -8,12 +8,14 @@ variable "name" {
   description = "The name of the App Registration."
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "resourceIdentifier" {
   description = "Identifier of the resource e.g. api or app."
   type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "owners" {
@@ -34,7 +36,9 @@ variable "sign_in_audience" {
 
 variable "environment" {
   description = "This variable specifies the current environment. Must be on of [dev],[test] or [prod]"
+  type        = string
   default     = ""
+  nullable    = false
 }
 
 variable "expiration_date" {
