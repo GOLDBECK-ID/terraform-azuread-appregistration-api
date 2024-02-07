@@ -14,7 +14,7 @@ parameters:
 trigger:
   branches:
     include:
-      - main
+      - dev
 
 pool:
   vmImage: ubuntu-latest
