@@ -28,12 +28,12 @@ resources:
   - repository: templates
     name: Pipeline-Templates/pipeline-template-sonarCloud
     type: git
-    ref: refs/tags/parameters['templateVersion']
+    ref: refs/tags/0.0.10
 
 name: $(date:yyyyMMdd)$(rev:.r)
 
 steps:
   - template: terraform.yml@templates
     parameters:
-      jdkVersion: parameters['jdkVersion']
-      sonarCloudProjectName: parameters['sonarCloudProjectName']
+      jdkVersion: 17
+      sonarCloudProjectName: terraform-azuread-appregistration-api
