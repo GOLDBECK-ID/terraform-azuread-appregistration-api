@@ -1,35 +1,22 @@
-parameters:
-  - name: jdkVersion
-    displayName: JDK Version Number [LTS 17]
-    type: string
-    default: 17
-    values:
-      - 17
-      - 21 #scheduled for release on September 19, 2023
-  - name: sonarCloudProjectName
-    displayName: Project Name [terraform-azuread-appregistration-api]
-    type: string
-    default: terraform-azuread-appregistration-api
-
 trigger:
   branches:
     include:
-      - dev
+      - main
 
 pool:
   vmImage: ubuntu-latest
 
 resources:
   repositories:
-  - repository: DevSecOps_Templates
-    name: DevSecOps/templates
+  - repository: templates
+    name: Pipeline-Templates/pipeline-template-sonarCloud
     type: git
-    ref: main
+    ref: refs/tags/0.0.10
 
 name: $(date:yyyyMMdd)$(rev:.r)
 
 steps:
-  - template: sonarCloud/terraform.yml@DevSecOps_Templates
+  - template: terraform.yml@templates
     parameters:
-      jdkVersion: ${{ parameters.jdkVersion }}
-      sonarCloudProjectName: ${{ parameters.sonarCloudProjectName }}
+      jdkVersion: 17
+      sonarCloudProjectName: terraform-azuread-appregistration-api
