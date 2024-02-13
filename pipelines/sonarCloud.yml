@@ -37,3 +37,4 @@ steps:
     parameters:
       jdkVersion: 17
       sonarCloudProjectName: terraform-azuread-appregistration-api
+      sonarCloudEndpointName: SonarCloud
