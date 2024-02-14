@@ -18,7 +18,7 @@ parameters:
 trigger:
   branches:
     include:
-      - main #TODO change to default branch
+      - refs/heads/dev
 
 pool:
   vmImage: ubuntu-latest
