@@ -77,3 +77,10 @@ resource "azuread_application_password" "ad_application_password" {
   display_name   = "gb-${var.name}-${var.resourceIdentifier}-${var.environment}-secret"
   end_date       = var.expiration_date
 }
+
+resource "azuread_application_pre_authorized" "pre_authorized_clients" {
+  count                = var.authorized_app_id == "" ? 0 : 1
+  application_id       = azuread_application.adappregistration.id
+  authorized_client_id = var.authorized_app_id
+  permission_ids       = [random_uuid.app_reg_user_impersonation.result]
+}
