@@ -5,7 +5,7 @@ data "azuread_group" "adgroup" {
 }
 
 resource "random_uuid" "app_reg_user_impersonation" {
-  count = var.authorized_app_id == "" ? 0 : var.is_frontend ? 0 : 1
+  count = var.authorized_app_id == null ? 0 : var.is_frontend ? 0 : 1
 }
 
 # Manages an application registration within Azure Active Directory.
@@ -90,4 +90,6 @@ resource "azuread_application_pre_authorized" "pre_authorized_clients" {
   application_id       = azuread_application.adappregistration.id
   authorized_client_id = var.authorized_app_id
   permission_ids       = [random_uuid.app_reg_user_impersonation[0].result]
+
+  depends_on = [random_uuid.app_reg_user_impersonation]
 }
