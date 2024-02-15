@@ -4,15 +4,21 @@ data "azuread_group" "adgroup" {
   display_name = "AZU_${data.azurerm_subscription.current.display_name}_Contributor"
 }
 
-resource "random_uuid" "app_reg_user_impersonation" {}
+resource "random_uuid" "app_reg_user_impersonation" {
+  count = var.authorized_app_id == "" ? 0 : var.is_frontend ? 0 : 1
+}
 
 # Manages an application registration within Azure Active Directory.
 # 
 # For a more lightweight alternative, please see the azuread_application_registration resource.
 # Please note that this resource should not be used together with the azuread_application_registration resource when managing the same application.
 resource "azuread_application" "adappregistration" {
-  display_name     = "gb-${var.name}-${var.resourceIdentifier}-${var.environment}"
-  identifier_uris  = var.is_frontend ? [] : ["api://gb-${lower(var.name)}-${var.resourceIdentifier}-${var.environment}.azurewebsites.net"]
+  display_name = "gb-${var.name}-${var.resourceIdentifier}-${var.environment}"
+
+  identifier_uris = var.is_frontend ? [] : [
+    "api://gb-${lower(var.name)}-${var.resourceIdentifier}-${var.environment}.azurewebsites.net"
+  ]
+
   owners           = var.owners
   sign_in_audience = var.sign_in_audience
 
@@ -53,12 +59,13 @@ resource "azuread_application" "adappregistration" {
       oauth2_permission_scope {
         admin_consent_display_name = "Allow the application to access (gb-${lower(var.name)}-${var.resourceIdentifier}-${var.environment}) on behalf of the signed-in user."
         admin_consent_description  = "Access api (gb-${lower(var.name)}-${var.resourceIdentifier}-${var.environment})"
-        enabled                    = true
-        id                         = random_uuid.app_reg_user_impersonation.result
-        type                       = "User"
         user_consent_description   = "Allow the application to access the api on your behalf."
         user_consent_display_name  = "Access gb-${lower(var.name)}-${var.resourceIdentifier}-${var.environment}"
-        value                      = "user_impersonation"
+
+        enabled = true
+        id      = random_uuid.app_reg_user_impersonation[0].result
+        type    = "User"
+        value   = "user_impersonation"
       }
     }
   }
@@ -82,5 +89,5 @@ resource "azuread_application_pre_authorized" "pre_authorized_clients" {
   count                = var.authorized_app_id == "" ? 0 : 1
   application_id       = azuread_application.adappregistration.id
   authorized_client_id = var.authorized_app_id
-  permission_ids       = [random_uuid.app_reg_user_impersonation.result]
+  permission_ids       = [random_uuid.app_reg_user_impersonation[0].result]
 }
