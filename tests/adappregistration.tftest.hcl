@@ -71,8 +71,8 @@ run "app" {
   }
 
   assert {
-    condition     = length(azuread_application.adappregistration.web) != 0
-    error_message = "wrong"
+    condition     = length(azuread_application.adappregistration.web) > 0
+    error_message = "With var.web_redirect_uris there are a web block. Current length is: ${length(azuread_application.adappregistration.web)}"
   }
 
   assert {
