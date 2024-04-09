@@ -4,6 +4,12 @@ output "appregistration_client_id" {
   sensitive   = false
 }
 
+output "appregistration_object_id" {
+  description = "The Entra Object ID for the application."
+  value       = azuread_application.adappregistration.object_id
+  sensitive   = false
+}
+
 output "appregistration_id" {
   description = "The Terraform resource ID for the application, for use when referencing this resource in your Terraform configuration."
   value       = azuread_application.adappregistration.id
