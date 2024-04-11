@@ -21,6 +21,12 @@ output "appregistration_client_secret" {
   sensitive   = true
 }
 
+output "serviceprincipal_object_id" {
+  description = "The Entra Object ID for the applications ServicePrincipal."
+  value       = azuread_service_principal.ad_service_principal.object_id
+  sensitive   = false
+}
+
 output "identifier_uris" {
   description = "A set of user-defined URI(s) that uniquely identify an application within its Azure AD tenant, or within a verified custom domain if the application is multi-tenant."
   value       = azuread_application.adappregistration.identifier_uris
