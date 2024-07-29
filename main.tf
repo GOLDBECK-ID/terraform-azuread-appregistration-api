@@ -9,7 +9,7 @@ resource "random_uuid" "app_reg_user_impersonation" {
 }
 
 resource "random_uuid" "app_role_id" {
-  count = var.app_roles == null ? 0 : 1
+  count = length(var.app_roles)
 }
 
 # Manages an application registration within Azure Active Directory.
@@ -61,7 +61,7 @@ resource "azuread_application" "adappregistration" {
       description          = app_role.value.description
       display_name         = app_role.value.display_name
       enabled              = app_role.value.enabled
-      id                   = random_uuid.app_role_id[0].result
+      id                   = random_uuid.app_role_id[app_role.key].result
       value                = app_role.value.value
     }
   }
