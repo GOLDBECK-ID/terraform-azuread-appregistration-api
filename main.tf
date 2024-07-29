@@ -9,7 +9,7 @@ resource "random_uuid" "app_reg_user_impersonation" {
 }
 
 resource "random_uuid" "app_role_id" {
-  count = length(var.app_roles)
+  count = var.app_roles == null ? 0 : length(var.app_roles)
 }
 
 # Manages an application registration within Azure Active Directory.
