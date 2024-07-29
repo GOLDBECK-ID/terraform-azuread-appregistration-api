@@ -8,6 +8,10 @@ resource "random_uuid" "app_reg_user_impersonation" {
   count = var.authorized_app_id == null ? 0 : var.is_frontend ? 0 : 1
 }
 
+resource "random_uuid" "app_role_id" {
+  count = var.app_roles == null ? 0 : 1
+}
+
 # Manages an application registration within Azure Active Directory.
 # 
 # For a more lightweight alternative, please see the azuread_application_registration resource.
@@ -47,6 +51,18 @@ resource "azuread_application" "adappregistration" {
           type = access.value.type
         }
       }
+    }
+  }
+
+  dynamic "app_role" {
+    for_each = var.app_roles == null ? [] : var.app_roles
+    content {
+      allowed_member_types = app_role.value.allowed_member_types
+      description          = app_role.value.description
+      display_name         = app_role.value.display_name
+      enabled              = app_role.value.enabled
+      id                   = random_uuid.app_role_id[0].result
+      value                = app_role.value.value
     }
   }
 
