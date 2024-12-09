@@ -3,7 +3,7 @@ data "azurerm_subscription" "current" {}
 module "naming" {
   source  = "Azure/naming/azurerm"
   version = "0.4.2"
-  prefix  = ["gb", var.resourceIdentifier, var.environment]
+  prefix  = ["gb", var.name, var.resourceIdentifier, var.environment]
 }
 
 data "azuread_group" "adgroup" {
