@@ -7,8 +7,7 @@ module "naming" {
 }
 
 data "azuread_group" "adgroup" {
-  display_name = module.naming.resource_group.name
-  # display_name = "AZU_${data.azurerm_subscription.current.display_name}_Contributor"
+  display_name = "AZU_${data.azurerm_subscription.current.display_name}_Contributor"
 }
 
 resource "random_uuid" "app_reg_user_impersonation" {
