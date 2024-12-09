@@ -1,5 +1,10 @@
 data "azurerm_subscription" "current" {}
 
+module "naming" {
+  source  = "Azure/naming/azurerm"
+  version = "0.4.2"
+}
+
 data "azuread_group" "adgroup" {
   display_name = "AZU_${data.azurerm_subscription.current.display_name}_Contributor"
 }
