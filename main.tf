@@ -3,10 +3,12 @@ data "azurerm_subscription" "current" {}
 module "naming" {
   source  = "Azure/naming/azurerm"
   version = "0.4.2"
+  prefix  = ["gb", var.resourceIdentifier, var.environment]
 }
 
 data "azuread_group" "adgroup" {
-  display_name = "AZU_${data.azurerm_subscription.current.display_name}_Contributor"
+  display_name = module.naming.resource_group.name
+  # display_name = "AZU_${data.azurerm_subscription.current.display_name}_Contributor"
 }
 
 resource "random_uuid" "app_reg_user_impersonation" {
