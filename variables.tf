@@ -13,10 +13,9 @@ variable "name" {
 }
 
 variable "resourceIdentifier" {
-  description = "Identifier of the resource e.g. api or app."
+  description = "Identifier of the resource e.g. api, app, or empty."
   type        = string
   default     = ""
-  nullable    = false
 }
 
 variable "owners" {

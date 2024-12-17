@@ -12,15 +12,19 @@ resource "random_uuid" "app_role_id" {
   count = var.app_roles == null ? 0 : length(var.app_roles)
 }
 
+locals {
+  app_name = length(var.resourceIdentifier) == 0 ? "gb-${var.name}-${var.environment}" : "gb-${var.name}-${var.resourceIdentifier}-${var.environment}"
+}
+
 # Manages an application registration within Azure Active Directory.
 # 
 # For a more lightweight alternative, please see the azuread_application_registration resource.
 # Please note that this resource should not be used together with the azuread_application_registration resource when managing the same application.
 resource "azuread_application" "adappregistration" {
-  display_name = "gb-${var.name}-${var.resourceIdentifier}-${var.environment}"
+  display_name = local.app_name
 
   identifier_uris = var.is_frontend ? [] : [
-    "api://gb-${lower(var.name)}-${var.resourceIdentifier}-${var.environment}.azurewebsites.net"
+    "api://${lower(local.app_name)}.azurewebsites.net"
   ]
 
   owners           = var.owners
@@ -73,10 +77,10 @@ resource "azuread_application" "adappregistration" {
       requested_access_token_version = 1
 
       oauth2_permission_scope {
-        admin_consent_display_name = "Allow the application to access (gb-${lower(var.name)}-${var.resourceIdentifier}-${var.environment}) on behalf of the signed-in user."
-        admin_consent_description  = "Access api (gb-${lower(var.name)}-${var.resourceIdentifier}-${var.environment})"
+        admin_consent_display_name = "Allow the application to access (${lower(local.app_name)}) on behalf of the signed-in user."
+        admin_consent_description  = "Access api (${lower(local.app_name)})"
         user_consent_description   = "Allow the application to access the api on your behalf."
-        user_consent_display_name  = "Access gb-${lower(var.name)}-${var.resourceIdentifier}-${var.environment}"
+        user_consent_display_name  = "Access ${lower(local.app_name)}"
 
         enabled = true
         id      = random_uuid.app_reg_user_impersonation[0].result
@@ -97,7 +101,7 @@ resource "azuread_service_principal" "ad_service_principal" {
 
 resource "azuread_application_password" "ad_application_password" {
   application_id = azuread_application.adappregistration.id
-  display_name   = "gb-${var.name}-${var.resourceIdentifier}-${var.environment}-secret"
+  display_name   = "${local.app_name}-secret"
   end_date       = var.expiration_date
 }
 
