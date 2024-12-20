@@ -35,17 +35,17 @@ run "general" {
   }
 
   assert {
-    condition     = azuread_application.adappregistration.display_name == "gb-name-resourceIdentifier-environment"
+    condition     = azuread_application.adappregistration.display_name == "gb-name-${var.resourceIdentifier}-environment"
     error_message = "incorrect displayName"
   }
 
   assert {
-    condition     = azuread_application_password.ad_application_password.display_name != "gb-name-resourceIdentifier-environment"
+    condition     = azuread_application_password.ad_application_password.display_name != "gb-name-${var.resourceIdentifier}-environment"
     error_message = "incorrect display name in application password resource."
   }
 
   assert {
-    condition     = azuread_application_password.ad_application_password.display_name == "gb-name-resourceIdentifier-environment-secret"
+    condition     = azuread_application_password.ad_application_password.display_name == "gb-name-${var.resourceIdentifier}-environment-secret"
     error_message = "incorrect display name in application password resource."
   }
 }
