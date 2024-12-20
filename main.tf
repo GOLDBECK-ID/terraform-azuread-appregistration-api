@@ -89,42 +89,6 @@ resource "azuread_application" "adappregistration" {
       }
     }
   }
-
-  group_membership_claims = var.group_membership_claims
-
-  dynamic "optional_claims" {
-    for_each = var.optional_claims == [] ? [] : var.optional_claims
-    content {
-      dynamic "access_token" {
-        for_each = optional_claims.value.access_token == null ? [] : optional_claims.value.access_token
-        iterator = access_token
-        content {
-          additional_properties = access_token.value.additional_properties
-          essential             = access_token.value.essential
-          name                  = access_token.value.name
-        }
-      }
-      dynamic "id_token" {
-        for_each = optional_claims.value.id_token == null ? [] : optional_claims.value.id_token
-        iterator = id_token
-        content {
-          additional_properties = id_token.value.additional_properties
-          essential             = id_token.value.essential
-          name                  = id_token.value.name
-        }
-      }
-      dynamic "saml2_token" {
-        for_each = optional_claims.value.saml2_token == null ? [] : optional_claims.value.saml2_token
-        iterator = saml2_token
-        content {
-          additional_properties = saml2_token.value.additional_properties
-          essential             = saml2_token.value.essential
-          name                  = saml2_token.value.name
-        }
-      }
-    }
-  }
-
   lifecycle {}
 }
 
