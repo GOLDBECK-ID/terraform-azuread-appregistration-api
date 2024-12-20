@@ -107,3 +107,17 @@ variable "azuread_service_principal_assignment_required" {
   type        = bool
   default     = false
 }
+
+variable "group_membership_claims" {
+  description = <<EOT
+  Configures the groups claim issued in a user or OAuth 2.0 access token that the app expects.
+  Available options are:
+  - None: No groups claim is issued in the token.
+  - SecurityGroup: Groups claim includes the security groups.
+  - All: Groups claim includes all types of groups.
+  - DirectoryRole: Groups claim includes directory roles.
+  EOT
+  type        = set(string)
+  default     = ["None"]
+  nullable    = false
+}
