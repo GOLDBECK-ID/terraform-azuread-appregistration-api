@@ -73,8 +73,7 @@ run "app" {
   command = plan
 
   variables {
-    is_frontend   = true
-    redirect_uris = ["http://localhost:4200/"]
+    is_frontend = true
   }
 
   assert {

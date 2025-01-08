@@ -53,13 +53,6 @@ variable "is_frontend" {
   default     = false
 }
 
-variable "redirect_uris" {
-  description = "A set of URLs where user tokens are sent for sign-in, or the redirect URIs where OAuth 2.0 authorization codes and access tokens are sent. Must be a valid https URL."
-  type        = list(string)
-  default     = null
-  nullable    = true
-}
-
 variable "required_resource_access" {
   description = <<EOT
   Required resource access for this application. A collection of required_resource_access blocks as documented below. Each block supports the following:
