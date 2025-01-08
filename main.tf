@@ -115,3 +115,12 @@ resource "azuread_application_pre_authorized" "pre_authorized_clients" {
 
   depends_on = [random_uuid.app_reg_user_impersonation]
 }
+
+resource "azuread_application_redirect_uris" "redirect_uris_single_page_application" {
+  count          = var.redirect_uris != null ? 1 : 0
+  application_id = azuread_application.adappregistration.id
+  type           = "SPA"
+  redirect_uris  = var.redirect_uris
+
+  depends_on = [azuread_application.adappregistration]
+}
