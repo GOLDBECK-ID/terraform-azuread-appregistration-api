@@ -73,8 +73,7 @@ run "app" {
   command = plan
 
   variables {
-    is_frontend   = true
-    redirect_uris = ["http://localhost:4200/"]
+    is_frontend = true
   }
 
   assert {
@@ -85,11 +84,6 @@ run "app" {
   assert {
     condition     = length(azuread_application.adappregistration.web) > 0
     error_message = "With var.web_redirect_uris there are a web block. Current length is: ${length(azuread_application.adappregistration.web)}"
-  }
-
-  assert {
-    condition     = length(azuread_application.adappregistration.single_page_application) != 0
-    error_message = "With redirect_uris single_page_application will be created."
   }
 }
 

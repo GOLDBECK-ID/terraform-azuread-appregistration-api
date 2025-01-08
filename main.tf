@@ -38,10 +38,6 @@ resource "azuread_application" "adappregistration" {
     }
   }
 
-  single_page_application {
-    redirect_uris = var.redirect_uris
-  }
-
   dynamic "required_resource_access" {
     for_each = var.required_resource_access
     iterator = resource
@@ -90,7 +86,12 @@ resource "azuread_application" "adappregistration" {
       }
     }
   }
-  lifecycle {}
+  lifecycle {
+    ignore_changes = [
+      optional_claims,
+      single_page_application
+    ]
+  }
 }
 
 # Manages a service principal associated with an application within Azure Active Directory.
