@@ -35,6 +35,11 @@ run "general" {
   }
 
   assert {
+    condition     = output.display_name == "gb-name-${var.resourceIdentifier}-environment"
+    error_message = "incorrect displayName"
+  }
+
+  assert {
     condition     = azuread_application.adappregistration.display_name == "gb-name-${var.resourceIdentifier}-environment"
     error_message = "incorrect displayName"
   }
