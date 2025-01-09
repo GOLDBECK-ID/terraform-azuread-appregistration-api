@@ -35,22 +35,22 @@ run "general" {
   }
 
   assert {
-    condition     = output.display_name == "gb-name-${var.resourceIdentifier}-environment"
+    condition     = output.display_name == "gb-${var.name}-${var.resourceIdentifier}-${var.environment}"
     error_message = "incorrect displayName"
   }
 
   assert {
-    condition     = azuread_application.adappregistration.display_name == "gb-name-${var.resourceIdentifier}-environment"
+    condition     = azuread_application.adappregistration.display_name == "gb-${var.name}-${var.resourceIdentifier}-${var.environment}"
     error_message = "incorrect displayName"
   }
 
   assert {
-    condition     = azuread_application_password.ad_application_password.display_name != "gb-name-${var.resourceIdentifier}-environment"
+    condition     = azuread_application_password.ad_application_password.display_name != "gb-${var.name}-${var.resourceIdentifier}-${var.environment}"
     error_message = "incorrect display name in application password resource."
   }
 
   assert {
-    condition     = azuread_application_password.ad_application_password.display_name == "gb-name-${var.resourceIdentifier}-environment-secret"
+    condition     = azuread_application_password.ad_application_password.display_name == "gb-${var.name}-${var.resourceIdentifier}-${var.environment}-secret"
     error_message = "incorrect display name in application password resource."
   }
 }
@@ -96,7 +96,7 @@ run "empty_identifier" {
   command = plan
 
   assert {
-    condition     = azuread_application.adappregistration.display_name == "gb-name-environment"
+    condition     = azuread_application.adappregistration.display_name == "gb-${var.name}-${var.environment}"
     error_message = "incorrect displayName"
   }
 }
