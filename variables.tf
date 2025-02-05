@@ -90,9 +90,16 @@ variable "app_roles" {
   nullable = true
 }
 
+variable "spa_redirect_uris" {
+  description = "The URLs where user tokens are sent for sign-in, or the redirect URIs where OAuth 2.0 authorization codes and access tokens are sent."
+  type        = list(string)
+  default     = []
+}
+
 variable "web_redirect_uris" {
-  type    = list(string)
-  default = []
+  description = "The URLs where user tokens are sent for sign-in, or the redirect URIs where OAuth 2.0 authorization codes and access tokens are sent."
+  type        = list(string)
+  default     = []
 }
 
 variable "azuread_service_principal_assignment_required" {

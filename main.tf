@@ -31,6 +31,10 @@ resource "azuread_application" "adappregistration" {
   sign_in_audience        = var.sign_in_audience
   group_membership_claims = var.group_membership_claims
 
+  single_page_application {
+    redirect_uris = var.spa_redirect_uris
+  }
+
   web {
     redirect_uris = var.web_redirect_uris
     implicit_grant {
