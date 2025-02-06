@@ -21,6 +21,11 @@ output "appregistration_client_secret" {
   sensitive   = true
 }
 
+output "display_name" {
+  description = "The name of the application."
+  value       = azuread_application.adappregistration.display_name
+}
+
 output "serviceprincipal_object_id" {
   description = "The Entra Object ID for the applications ServicePrincipal."
   value       = azuread_service_principal.ad_service_principal.object_id

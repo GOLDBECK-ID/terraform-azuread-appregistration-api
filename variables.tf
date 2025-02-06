@@ -13,10 +13,9 @@ variable "name" {
 }
 
 variable "resourceIdentifier" {
-  description = "Identifier of the resource e.g. api or app."
+  description = "Identifier of the resource e.g. api, app, or empty."
   type        = string
   default     = ""
-  nullable    = false
 }
 
 variable "owners" {
@@ -52,13 +51,6 @@ variable "is_frontend" {
   description = "Distinguish between frontend and backend registration"
   type        = bool
   default     = false
-}
-
-variable "redirect_uris" {
-  description = "A set of URLs where user tokens are sent for sign-in, or the redirect URIs where OAuth 2.0 authorization codes and access tokens are sent. Must be a valid https URL."
-  type        = list(string)
-  default     = null
-  nullable    = true
 }
 
 variable "required_resource_access" {
@@ -98,13 +90,34 @@ variable "app_roles" {
   nullable = true
 }
 
+variable "spa_redirect_uris" {
+  description = "The URLs where user tokens are sent for sign-in, or the redirect URIs where OAuth 2.0 authorization codes and access tokens are sent."
+  type        = list(string)
+  default     = []
+}
+
 variable "web_redirect_uris" {
-  type    = list(string)
-  default = []
+  description = "The URLs where user tokens are sent for sign-in, or the redirect URIs where OAuth 2.0 authorization codes and access tokens are sent."
+  type        = list(string)
+  default     = []
 }
 
 variable "azuread_service_principal_assignment_required" {
   description = "Whether this service principal requires an app role assignment to a user or group before Azure AD will issue a user or access token to the application. Defaults to false."
   type        = bool
   default     = false
+}
+
+variable "group_membership_claims" {
+  description = <<EOT
+  Configures the groups claim issued in a user or OAuth 2.0 access token that the app expects.
+  Available options are:
+  - None: No groups claim is issued in the token.
+  - SecurityGroup: Groups claim includes the security groups.
+  - All: Groups claim includes all types of groups.
+  - DirectoryRole: Groups claim includes directory roles.
+  EOT
+  type        = set(string)
+  default     = ["None"]
+  nullable    = false
 }

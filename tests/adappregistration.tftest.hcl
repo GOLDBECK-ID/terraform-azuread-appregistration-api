@@ -2,10 +2,18 @@ mock_provider "azuread" {}
 mock_provider "azurerm" {}
 
 variables {
-  name               = "name"
-  resourceIdentifier = "resourceIdentifier"
-  environment        = "environment"
-  owners             = ["8673a88b-805d-435f-b1da-45c74574d607"]
+  name        = "name"
+  environment = "environment"
+  owners      = ["8673a88b-805d-435f-b1da-45c74574d607"]
+  app_roles = [
+    {
+      allowed_member_types = ["User"]
+      description          = "User impersonation"
+      display_name         = "User impersonation"
+      value                = "user_impersonation"
+      enabled              = true
+    }
+  ]
   required_resource_access = [
     {
       resource_app_id = "some-id"
@@ -22,18 +30,27 @@ variables {
 run "general" {
   command = plan
 
+  variables {
+    resourceIdentifier = "resourceIdentifier"
+  }
+
   assert {
-    condition     = azuread_application.adappregistration.display_name == "gb-name-resourceIdentifier-environment"
+    condition     = output.display_name == "gb-${var.name}-${var.resourceIdentifier}-${var.environment}"
     error_message = "incorrect displayName"
   }
 
   assert {
-    condition     = azuread_application_password.ad_application_password.display_name != "gb-name-resourceIdentifier-environment"
+    condition     = azuread_application.adappregistration.display_name == "gb-${var.name}-${var.resourceIdentifier}-${var.environment}"
+    error_message = "incorrect displayName"
+  }
+
+  assert {
+    condition     = azuread_application_password.ad_application_password.display_name != "gb-${var.name}-${var.resourceIdentifier}-${var.environment}"
     error_message = "incorrect display name in application password resource."
   }
 
   assert {
-    condition     = azuread_application_password.ad_application_password.display_name == "gb-name-resourceIdentifier-environment-secret"
+    condition     = azuread_application_password.ad_application_password.display_name == "gb-${var.name}-${var.resourceIdentifier}-${var.environment}-secret"
     error_message = "incorrect display name in application password resource."
   }
 }
@@ -61,8 +78,7 @@ run "app" {
   command = plan
 
   variables {
-    is_frontend   = true
-    redirect_uris = ["http://localhost:4200/"]
+    is_frontend = true
   }
 
   assert {
@@ -74,9 +90,13 @@ run "app" {
     condition     = length(azuread_application.adappregistration.web) > 0
     error_message = "With var.web_redirect_uris there are a web block. Current length is: ${length(azuread_application.adappregistration.web)}"
   }
+}
+
+run "empty_identifier" {
+  command = plan
 
   assert {
-    condition     = length(azuread_application.adappregistration.single_page_application) != 0
-    error_message = "With redirect_uris single_page_application will be created."
+    condition     = azuread_application.adappregistration.display_name == "gb-${var.name}-${var.environment}"
+    error_message = "incorrect displayName"
   }
 }
