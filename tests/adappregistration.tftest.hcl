@@ -55,6 +55,36 @@ run "general" {
   }
 }
 
+
+run "empty_identifier" {
+  command = plan
+
+  assert {
+    condition     = azuread_application.adappregistration.display_name == "gb-${var.name}-${var.environment}"
+    error_message = "incorrect displayName"
+  }
+}
+
+run "display_name" {
+  command = plan
+
+  variables {
+    display_name       = "display_name"
+    name               = "name"
+    resourceIdentifier = "resourceIdentifier"
+  }
+
+  assert {
+    condition     = azuread_application.adappregistration.display_name == "display_name"
+    error_message = "incorrect displayName"
+  }
+
+  assert {
+    condition     = output.display_name != "gb-${var.name}-${var.resourceIdentifier}-${var.environment}"
+    error_message = "incorrect displayName"
+  }
+}
+
 run "api" {
   command = plan
 
@@ -97,14 +127,5 @@ run "app" {
   assert {
     condition     = length(azuread_application.adappregistration.web) == 0
     error_message = "With var.web.redirect_uris there are a web block. Current length is: ${length(azuread_application.adappregistration.web)}"
-  }
-}
-
-run "empty_identifier" {
-  command = plan
-
-  assert {
-    condition     = azuread_application.adappregistration.display_name == "gb-${var.name}-${var.environment}"
-    error_message = "incorrect displayName"
   }
 }
