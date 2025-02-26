@@ -202,7 +202,6 @@ variable "oauth2_permission_scopes" {
     user_consent_description   = string
     user_consent_display_name  = string
     enabled                    = bool
-    id                         = string
     type                       = string
     value                      = string
   }))
@@ -212,7 +211,6 @@ variable "oauth2_permission_scopes" {
     user_consent_description   = "Allow the application to access the API on your behalf."
     user_consent_display_name  = "Access API"
     enabled                    = true
-    id                         = "00000000-0000-0000-0000-000000000000"
     type                       = "User"
     value                      = "user_impersonation"
   }]
