@@ -98,19 +98,24 @@ resource "azuread_application" "adappregistration" {
       mapped_claims_enabled          = false
       requested_access_token_version = 1
 
-      oauth2_permission_scope {
-        admin_consent_display_name = "Allow the application to access (${lower(local.app_name)}) on behalf of the signed-in user."
-        admin_consent_description  = "Access api (${lower(local.app_name)})"
-        user_consent_description   = "Allow the application to access the api on your behalf."
-        user_consent_display_name  = "Access ${lower(local.app_name)}"
+      dynamic "oauth2_permission_scope" {
+        for_each = var.oauth2_permission_scopes
+        iterator = scope
+        content {
+          admin_consent_display_name = scope.value.admin_consent_display_name
+          admin_consent_description  = scope.value.admin_consent_description
+          user_consent_description   = scope.value.user_consent_description
+          user_consent_display_name  = scope.value.user_consent_display_name
 
-        enabled = true
-        id      = random_uuid.app_reg_user_impersonation[0].result
-        type    = "User"
-        value   = "user_impersonation"
+          enabled = scope.value.enabled
+          id      = random_uuid.app_reg_user_impersonation[scope.key].result
+          type    = scope.value.type
+          value   = scope.value.value
+        }
       }
     }
   }
+
   lifecycle {
     ignore_changes = [
       optional_claims,
