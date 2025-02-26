@@ -31,6 +31,15 @@ resource "azuread_application" "adappregistration" {
   sign_in_audience               = var.sign_in_audience
   group_membership_claims        = var.group_membership_claims
   fallback_public_client_enabled = var.fallback_public_client_enabled
+  dynamic "feature_tags" {
+    for_each = var.feature_tags == null ? [] : var.feature_tags
+    content {
+      custom_single_sign_on = feature_tags.value.custom_single_sign_on
+      enterprise            = feature_tags.value.enterprise
+      gallery               = feature_tags.value.gallery
+      hide                  = feature_tags.value.hide
+    }
+  }
 
   single_page_application {
     redirect_uris = var.spa_redirect_uris

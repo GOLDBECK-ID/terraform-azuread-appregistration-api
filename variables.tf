@@ -131,3 +131,26 @@ variable "fallback_public_client_enabled" {
   type        = bool
   default     = false
 }
+
+variable "feature_tags" {
+  description = <<EOT
+    (Optional) A collection of feature tags blocks as documented below:
+    [custom_single_sign_on] (Optional) Custom single sign-on feature tag.
+    [enterprise] (Optional) Enterprise feature tag.
+    [gallery] (Optional) Gallery feature tag.
+    [hide] (Optional) Hide feature tag.
+  EOT
+  type = list(object({
+    custom_single_sign_on = bool
+    enterprise            = bool
+    gallery               = bool
+    hide                  = bool
+  }))
+  default = [{
+    custom_single_sign_on = false
+    enterprise            = false
+    gallery               = false
+    hide                  = false
+  }]
+  nullable = true
+}
