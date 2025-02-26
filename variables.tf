@@ -96,11 +96,32 @@ variable "spa_redirect_uris" {
   default     = []
 }
 
-variable "web_redirect_uris" {
-  description = "The URLs where user tokens are sent for sign-in, or the redirect URIs where OAuth 2.0 authorization codes and access tokens are sent."
-  type        = list(string)
-  default     = []
+variable "web" {
+  description = <<EOT
+    (Optional) A collection of web blocks as documented below:
+    [homepage_url] (Optional) Home page or landing page of the application.
+    [implicit_grant] (Optional) An implicit_grant block as documented above.
+    [logout_url] (Optional) The URL that will be used by Microsoft's authorization service to sign out a user using front-channel, back-channel or SAML logout protocols.
+    [redirect_uris] (Optional) A set of URLs where user tokens are sent for sign-in, or the redirect URIs where OAuth 2.0 authorization codes and access tokens are sent. Must be a valid http URL or a URN.
+  EOT
+  type = object({
+    homepage_url = optional(string)
+    implicit_grant = optional(object({
+      access_token_issuance_enabled = optional(bool)
+      id_token_issuance_enabled     = optional(bool)
+    }))
+    logout_url    = optional(string)
+    redirect_uris = optional(list(string))
+  })
+  default  = null
+  nullable = true
 }
+
+# variable "web_redirect_uris" {
+#   description = "The URLs where user tokens are sent for sign-in, or the redirect URIs where OAuth 2.0 authorization codes and access tokens are sent."
+#   type        = list(string)
+#   default     = []
+# }
 
 variable "azuread_service_principal_assignment_required" {
   description = "Whether this service principal requires an app role assignment to a user or group before Azure AD will issue a user or access token to the application. Defaults to false."
