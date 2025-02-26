@@ -5,17 +5,25 @@ variable "authorized_app_id" {
   nullable    = true
 }
 
+variable "display_name" {
+  description = "The display name of the App Registration."
+  type        = string
+  default     = null
+  nullable    = true
+}
+
 variable "name" {
   description = "The name of the App Registration."
   type        = string
-  default     = ""
-  nullable    = false
+  default     = null
+  nullable    = true
 }
 
 variable "resourceIdentifier" {
   description = "Identifier of the resource e.g. api, app, or empty."
   type        = string
-  default     = ""
+  default     = null
+  nullable    = true
 }
 
 variable "owners" {

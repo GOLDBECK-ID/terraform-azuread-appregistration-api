@@ -13,7 +13,7 @@ resource "random_uuid" "app_role_id" {
 }
 
 locals {
-  app_name = length(var.resourceIdentifier) == 0 ? "gb-${var.name}-${var.environment}" : "gb-${var.name}-${var.resourceIdentifier}-${var.environment}"
+  app_name = var.resourceIdentifier == null ? "gb-${var.name}-${var.environment}" : "gb-${var.name}-${var.resourceIdentifier}-${var.environment}"
 }
 
 # Manages an application registration within Azure Active Directory.
@@ -21,7 +21,7 @@ locals {
 # For a more lightweight alternative, please see the azuread_application_registration resource.
 # Please note that this resource should not be used together with the azuread_application_registration resource when managing the same application.
 resource "azuread_application" "adappregistration" {
-  display_name = local.app_name
+  display_name = var.display_name == null ? local.app_name : var.display_name
 
   identifier_uris = var.is_frontend ? [] : [
     "api://${lower(local.app_name)}.azurewebsites.net"
