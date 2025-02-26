@@ -140,9 +140,7 @@ resource "azuread_application_password" "ad_application_password" {
 }
 
 resource "azuread_application_pre_authorized" "pre_authorized_clients" {
-  for_each = var.oauth2_permission_scopes == null ? (
-    var.authorized_app_id == null ? 0 : {}
-    ) : {
+  for_each = var.authorized_app_id == null ? {} : var.oauth2_permission_scopes == null ? {} : {
     for idx, scope in var.oauth2_permission_scopes : idx => scope
   }
 
