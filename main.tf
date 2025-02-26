@@ -50,22 +50,16 @@ resource "azuread_application" "adappregistration" {
     content {
       homepage_url  = var.web.homepage_url
       redirect_uris = var.web.redirect_uris
-      implicit_grant {
-        access_token_issuance_enabled = var.web.implicit_grant.access_token_issuance_enabled
-        id_token_issuance_enabled     = var.web.implicit_grant.id_token_issuance_enabled
+      dynamic "implicit_grant" {
+        for_each = var.web.implicit_grant == null ? [] : [1]
+        content {
+          access_token_issuance_enabled = var.web.implicit_grant.access_token_issuance_enabled
+          id_token_issuance_enabled     = var.web.implicit_grant.id_token_issuance_enabled
+        }
       }
       logout_url = var.web.logout_url
     }
   }
-  # web {
-  #   homepage_url  = var.web.homepage_url
-  #   redirect_uris = var.web.redirect_uris
-  #   implicit_grant {
-  #     access_token_issuance_enabled = var.web.implicit_grant.access_token_issuance_enabled
-  #     id_token_issuance_enabled     = var.web.implicit_grant.id_token_issuance_enabled
-  #   }
-  #   logout_url = var.web.logout_url
-  # }
 
   dynamic "required_resource_access" {
     for_each = var.required_resource_access
