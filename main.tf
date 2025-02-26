@@ -5,7 +5,9 @@ data "azuread_group" "adgroup" {
 }
 
 resource "random_uuid" "app_reg_user_impersonation" {
-  count = var.authorized_app_id == null ? 0 : var.is_frontend ? 0 : 1
+  count = var.oauth2_permission_scopes == null ? (
+    var.authorized_app_id == null ? 0 : var.is_frontend ? 0 : 1
+  ) : length(var.oauth2_permission_scopes)
 }
 
 resource "random_uuid" "app_role_id" {
@@ -138,10 +140,15 @@ resource "azuread_application_password" "ad_application_password" {
 }
 
 resource "azuread_application_pre_authorized" "pre_authorized_clients" {
-  count                = var.authorized_app_id == "" ? 0 : 1
+  for_each = var.oauth2_permission_scopes == null ? {} : {
+    for idx, scope in var.oauth2_permission_scopes : idx => scope
+  }
+
   application_id       = azuread_application.adappregistration.id
   authorized_client_id = var.authorized_app_id
-  permission_ids       = [random_uuid.app_reg_user_impersonation[0].result]
+  permission_ids = [
+    random_uuid.app_reg_user_impersonation[each.key].result
+  ]
 
   depends_on = [random_uuid.app_reg_user_impersonation]
 }

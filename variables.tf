@@ -1,7 +1,7 @@
 variable "authorized_app_id" {
   description = "Authorized client application in settings 'Expose an API'"
   type        = string
-  default     = ""
+  default     = null
   nullable    = true
 }
 
@@ -205,14 +205,6 @@ variable "oauth2_permission_scopes" {
     type                       = string
     value                      = string
   }))
-  default = [{
-    admin_consent_display_name = "Allow the application to access the API on behalf of the signed-in user."
-    admin_consent_description  = "Access API"
-    user_consent_description   = "Allow the application to access the API on your behalf."
-    user_consent_display_name  = "Access API"
-    enabled                    = true
-    type                       = "User"
-    value                      = "user_impersonation"
-  }]
+  default  = []
   nullable = true
 }
