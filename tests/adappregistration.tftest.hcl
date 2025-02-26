@@ -60,7 +60,15 @@ run "api" {
 
   variables {
     authorized_app_id = "8673a88b-805d-435f-b1da-45c74574d607"
-    web_redirect_uris = ["https://some-url.com/, https://some-url.com"]
+    web = {
+      homepage_url = "https://some-url.com"
+      implicit_grant = {
+        access_token_issuance_enabled = true
+        id_token_issuance_enabled     = true
+      }
+      logout_url    = "https://some-url.com"
+      redirect_uris = ["https://some-url.com/, https://some-url.com"]
+    }
   }
 
   assert {
@@ -70,7 +78,7 @@ run "api" {
 
   assert {
     condition     = length(azuread_application.adappregistration.web) > 0
-    error_message = "With var.web_redirect_uris there are a web block. Current length is: ${length(azuread_application.adappregistration.web)}"
+    error_message = "With var.web.redirect_uris there are a web block. Current length is: ${length(azuread_application.adappregistration.web)}"
   }
 }
 
@@ -87,8 +95,8 @@ run "app" {
   }
 
   assert {
-    condition     = length(azuread_application.adappregistration.web) > 0
-    error_message = "With var.web_redirect_uris there are a web block. Current length is: ${length(azuread_application.adappregistration.web)}"
+    condition     = length(azuread_application.adappregistration.web) == 0
+    error_message = "With var.web.redirect_uris there are a web block. Current length is: ${length(azuread_application.adappregistration.web)}"
   }
 }
 
