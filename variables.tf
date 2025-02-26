@@ -121,3 +121,13 @@ variable "group_membership_claims" {
   default     = ["None"]
   nullable    = false
 }
+
+variable "fallback_public_client_enabled" {
+  description = <<EOT
+    Specifies whether the application is a public client.
+    Appropriate for apps using token grant flows that don't use a redirect URI.
+    Defaults to false.
+  EOT
+  type        = bool
+  default     = false
+}

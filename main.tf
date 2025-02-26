@@ -27,9 +27,10 @@ resource "azuread_application" "adappregistration" {
     "api://${lower(local.app_name)}.azurewebsites.net"
   ]
 
-  owners                  = var.owners
-  sign_in_audience        = var.sign_in_audience
-  group_membership_claims = var.group_membership_claims
+  owners                         = var.owners
+  sign_in_audience               = var.sign_in_audience
+  group_membership_claims        = var.group_membership_claims
+  fallback_public_client_enabled = var.fallback_public_client_enabled
 
   single_page_application {
     redirect_uris = var.spa_redirect_uris
