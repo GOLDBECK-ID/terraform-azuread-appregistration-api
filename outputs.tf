@@ -42,3 +42,7 @@ output "permission_scope_ids" {
   value       = azuread_application.adappregistration.oauth2_permission_scope_ids
 }
 
+output "app_role_ids" {
+  description = "A mapping of App Role values to role IDs, intended to be useful when referencing app roles in other resources in your configuration."
+  value       = azuread_application.adappregistration.app_role_ids
+}
