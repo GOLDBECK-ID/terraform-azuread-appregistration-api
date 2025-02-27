@@ -200,8 +200,8 @@ variable "oauth2_permission_scopes" {
   type = list(object({
     admin_consent_display_name = string
     admin_consent_description  = string
-    user_consent_description   = string
-    user_consent_display_name  = string
+    user_consent_description   = optional(string)
+    user_consent_display_name  = optional(string)
     enabled                    = bool
     type                       = string
     value                      = string
