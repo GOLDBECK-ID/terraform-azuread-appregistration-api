@@ -146,6 +146,7 @@ resource "azuread_application_password" "ad_application_password" {
 
   lifecycle {
     ignore_changes = [
+      rotate_when_changed,
       end_date,
       display_name
     ]
