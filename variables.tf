@@ -49,12 +49,6 @@ variable "environment" {
   nullable    = false
 }
 
-variable "expiration_date" {
-  description = "The expiration date used for secrets etc."
-  type        = string
-  default     = "2099-12-31T23:59:59Z"
-}
-
 variable "is_frontend" {
   description = "Distinguish between frontend and backend registration"
   type        = bool

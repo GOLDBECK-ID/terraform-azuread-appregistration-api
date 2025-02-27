@@ -133,10 +133,23 @@ resource "azuread_service_principal" "ad_service_principal" {
   owners                       = var.owners
 }
 
+resource "time_rotating" "expiration_date" {
+  rotation_years = 2
+}
+
 resource "azuread_application_password" "ad_application_password" {
   application_id = azuread_application.adappregistration.id
   display_name   = "${local.app_name}-secret"
-  end_date       = var.expiration_date
+  rotate_when_changed = {
+    rotation = time_rotating.expiration_date.id
+  }
+
+  lifecycle {
+    ignore_changes = [
+      end_date,
+      display_name
+    ]
+  }
 }
 
 resource "azuread_application_pre_authorized" "pre_authorized_clients" {
