@@ -95,6 +95,7 @@ variable "app_roles" {
     value                = string
     enabled              = bool
   }))
+  default  = []
   nullable = true
 }
 
