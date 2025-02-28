@@ -5,7 +5,7 @@ data "azuread_group" "adgroup" {
 }
 
 resource "random_uuid" "app_role_id" {
-  count = var.app_roles == null ? 0 : length(var.app_roles)
+  count = length(var.app_roles)
 }
 
 resource "random_uuid" "app_reg_user_impersonation" {
