@@ -4,12 +4,6 @@ data "azuread_group" "adgroup" {
   display_name = "AZU_${data.azurerm_subscription.current.display_name}_Contributor"
 }
 
-resource "random_uuid" "app_reg_user_impersonation" {
-  count = var.oauth2_permission_scopes == null ? (
-    var.authorized_app_id == null ? 0 : var.is_frontend ? 0 : 1
-  ) : length(var.oauth2_permission_scopes)
-}
-
 resource "random_uuid" "app_role_id" {
   count = var.app_roles == null ? 0 : length(var.app_roles)
 }
@@ -161,8 +155,16 @@ resource "azuread_application_password" "ad_application_password" {
   }
 }
 
+resource "random_uuid" "app_reg_user_impersonation" {
+  count = var.oauth2_permission_scopes == null ? (
+    var.authorized_app_id == null ? 0 : (
+      var.is_frontend ? 0 : 1
+    )
+  ) : length(var.oauth2_permission_scopes)
+}
+
 resource "azuread_application_pre_authorized" "pre_authorized_clients" {
-  for_each = var.authorized_app_id == null ? {} : var.oauth2_permission_scopes == null ? {} : {
+  for_each = random_uuid.app_reg_user_impersonation == null ? {} : {
     for idx, scope in var.oauth2_permission_scopes : idx => scope
   }
 
