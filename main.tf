@@ -27,9 +27,9 @@ locals {
 resource "azuread_application" "adappregistration" {
   display_name = local.app_name
 
-  identifier_uris = var.is_frontend ? [] : [
+  identifier_uris = var.is_frontend ? [] : var.identifier_uri_with_name ? [
     "api://${lower(local.app_name)}.azurewebsites.net"
-  ]
+  ] : []
 
   owners                         = var.owners
   sign_in_audience               = var.sign_in_audience
@@ -124,6 +124,12 @@ resource "azuread_application" "adappregistration" {
       single_page_application
     ]
   }
+}
+
+resource "azuread_application_identifier_uri" "identifier_uri" {
+  count          = var.identifier_uris == null ? 0 : length(var.identifier_uris)
+  application_id = azuread_application.adappregistration.id
+  identifier_uri = var.identifier_uris[count.index]
 }
 
 # Manages a service principal associated with an application within Azure Active Directory.

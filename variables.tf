@@ -55,6 +55,19 @@ variable "is_frontend" {
   default     = false
 }
 
+variable "identifier_uri_with_name" {
+  description = "Identifier URI with name"
+  type        = bool
+  default     = true
+}
+
+variable "identifier_uris" {
+  description = "The URIs that identify the application within its Azure AD tenant, or within a verified custom domain if the application is multi-tenant."
+  type        = list(string)
+  default     = null
+  nullable    = true
+}
+
 variable "required_resource_access" {
   description = <<EOT
   Required resource access for this application. A collection of required_resource_access blocks as documented below. Each block supports the following:
