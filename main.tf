@@ -8,6 +8,10 @@ resource "random_uuid" "app_role_id" {
   count = var.app_roles == null ? 0 : length(var.app_roles)
 }
 
+resource "random_uuid" "app_reg_user_impersonation" {
+  count = length(var.oauth2_permission_scopes)
+}
+
 locals {
   app_name = var.display_name == null ? (
     var.resourceIdentifier == null ? "gb-${var.name}-${var.environment}" : "gb-${var.name}-${var.resourceIdentifier}-${var.environment}"
@@ -155,18 +159,18 @@ resource "azuread_application_password" "ad_application_password" {
   }
 }
 
-resource "random_uuid" "app_reg_user_impersonation" {
+resource "random_uuid" "app_reg_pre_authorized" {
   count = var.authorized_app_id == null ? 0 : 1
 }
 
 resource "azuread_application_pre_authorized" "pre_authorized_clients" {
-  count = length(random_uuid.app_reg_user_impersonation)
+  count = length(random_uuid.app_reg_pre_authorized)
 
   application_id       = azuread_application.adappregistration.id
   authorized_client_id = var.authorized_app_id
   permission_ids = [
-    random_uuid.app_reg_user_impersonation[count.index].result
+    random_uuid.app_reg_pre_authorized[count.index].result
   ]
 
-  depends_on = [random_uuid.app_reg_user_impersonation]
+  depends_on = [random_uuid.app_reg_pre_authorized]
 }
