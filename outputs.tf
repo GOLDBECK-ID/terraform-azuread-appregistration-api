@@ -46,3 +46,8 @@ output "app_role_ids" {
   description = "A mapping of App Role values to role IDs, intended to be useful when referencing app roles in other resources in your configuration."
   value       = azuread_application.adappregistration.app_role_ids
 }
+
+output "publisher_domain" {
+  description = "The verified publisher domain of the application."
+  value       = azuread_application.adappregistration.publisher_domain
+}
