@@ -129,3 +129,31 @@ run "app" {
     error_message = "With var.web.redirect_uris there are a web block. Current length is: ${length(azuread_application.adappregistration.web)}"
   }
 }
+
+run "identifier_uri_id" {
+  command = plan
+
+  variables {
+    identifier_uris          = ["api://some-uri"]
+    identifier_uri_with_name = false
+  }
+
+  assert {
+    condition     = length(azuread_application.adappregistration.identifier_uris) == 0
+    error_message = "Identifier uri is not needed."
+  }
+}
+
+run "identifier_uri_uris" {
+  command = plan
+
+  variables {
+    identifier_uris          = ["api://some-uri"]
+    identifier_uri_with_name = true
+  }
+
+  assert {
+    condition     = length(azuread_application.adappregistration.identifier_uris) > 0
+    error_message = "Identifier uri is needed."
+  }
+}
