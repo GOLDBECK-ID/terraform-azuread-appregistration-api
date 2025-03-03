@@ -121,7 +121,8 @@ resource "azuread_application" "adappregistration" {
   lifecycle {
     ignore_changes = [
       optional_claims,
-      single_page_application
+      single_page_application,
+      identifier_uris
     ]
   }
 }
