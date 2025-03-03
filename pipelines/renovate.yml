@@ -37,3 +37,5 @@ steps:
   - template: renovate.yml@templates
     parameters:
       githubComToken: "$(GITHUB_COM_TOKEN)"
+      autoApprovePatch: true
+      # autoMergePatch: true
