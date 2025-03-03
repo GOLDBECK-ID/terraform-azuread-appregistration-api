@@ -35,4 +35,8 @@ steps:
   - template: build.yml@templates
     parameters:
       backendServiceArm: ${{ parameters.backendServiceArm }}
-      tfOptions: '-junit-xml test.xml'
+      tfOptions: '-junit-xml TEST-$(Build.BuildName).xml'
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '**/TEST-*.xml'
