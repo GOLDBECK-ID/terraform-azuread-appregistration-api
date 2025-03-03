@@ -1,0 +1,38 @@
+parameters:
+  - name: templateVersion
+    displayName: Version tag of the used templates
+    type: string
+    default: 1.0
+  - name: backendServiceArm
+    displayName: 'Name of the service connection to the backend service ARM'
+    type: string
+    default: 'Terraform Pipelines'
+
+trigger:
+  branches:
+    include:
+      - feature/*
+      - hotfix/*
+      - bugfix/*
+      - fix/*
+  paths:
+    exclude:
+      - pipelines/*
+
+pool:
+  vmImage: ubuntu-latest
+
+resources:
+  repositories:
+  - repository: templates
+    name: Pipeline-Templates/pipeline-template-terraform
+    type: git
+    ref: refs/tags/${{ parameters.templateVersion }}
+
+name: $(date:yyyyMMdd).$(Build.BuildId)
+
+steps:
+  - template: build.yml@templates
+    parameters:
+      backendServiceArm: ${{ parameters.backendServiceArm }}
+      tfOptions: '-junit-xml test.xml'
