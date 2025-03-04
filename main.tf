@@ -78,9 +78,9 @@ resource "azuread_application" "adappregistration" {
       requested_access_token_version = 1
 
       oauth2_permission_scope {
-        admin_consent_display_name = "Allow the application to access (${lower(local.app_name)}) on behalf of the signed-in user."
-        admin_consent_description  = "Access api (${lower(local.app_name)})"
-        user_consent_description   = "Allow the application to access the api on your behalf."
+        admin_consent_description  = "Allow the application to access (${lower(local.app_name)}) on behalf of the signed-in user."
+        admin_consent_display_name = "Access ${lower(local.app_name)}"
+        user_consent_description   = "Allow the application to access (${lower(local.app_name)}) on your behalf."
         user_consent_display_name  = "Access ${lower(local.app_name)}"
 
         enabled = true
