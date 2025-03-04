@@ -148,8 +148,8 @@ variable "group_membership_claims" {
   - DirectoryRole: Groups claim includes directory roles.
   EOT
   type        = set(string)
-  default     = ["None"]
-  nullable    = false
+  default     = null
+  nullable    = true
 }
 
 variable "fallback_public_client_enabled" {
