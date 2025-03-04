@@ -5,15 +5,14 @@ variables {
   name        = "name"
   environment = "environment"
   owners      = ["8673a88b-805d-435f-b1da-45c74574d607"]
-  app_roles = [
-    {
+  app_roles = {
+    "user_impersonation" = {
       allowed_member_types = ["User"]
       description          = "User impersonation"
       display_name         = "User impersonation"
-      value                = "user_impersonation"
       enabled              = true
     }
-  ]
+  }
   required_resource_access = [
     {
       resource_app_id = "some-id"

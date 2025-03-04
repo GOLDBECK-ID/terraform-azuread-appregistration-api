@@ -5,7 +5,7 @@ data "azuread_group" "adgroup" {
 }
 
 resource "random_uuid" "app_role_id" {
-  count = length(var.app_roles)
+  for_each = var.app_roles
 }
 
 resource "random_uuid" "app_reg_user_impersonation" {
@@ -83,14 +83,14 @@ resource "azuread_application" "adappregistration" {
   }
 
   dynamic "app_role" {
-    for_each = var.app_roles == null ? [] : var.app_roles
+    for_each = var.app_roles
     content {
       allowed_member_types = app_role.value.allowed_member_types
       description          = app_role.value.description
       display_name         = app_role.value.display_name
       enabled              = app_role.value.enabled
       id                   = random_uuid.app_role_id[app_role.key].result
-      value                = app_role.value.value
+      value                = app_role.key
     }
   }
 
