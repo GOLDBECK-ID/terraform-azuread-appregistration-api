@@ -55,7 +55,6 @@ run "general" {
   }
 }
 
-
 run "empty_identifier" {
   command = plan
 
