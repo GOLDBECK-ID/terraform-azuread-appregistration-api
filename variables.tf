@@ -201,7 +201,7 @@ variable "oauth2_permission_scopes" {
     [user_consent_display_name] (Required) Display name for the user consent.
     [enabled] (Optional) Determines if the permission scope is enabled. Defaults to true.
     [type] (Required) The type of the permission scope. Must be "User" or "Admin".
-    [value] (Required) The value of the permission scope.
+    [value] (Required) As Mapping object name is the unique value of the permission scope.
   EOT
   type = map(object({
     admin_consent_display_name = string
