@@ -9,7 +9,7 @@ resource "random_uuid" "app_role_id" {
 }
 
 resource "random_uuid" "app_reg_user_impersonation" {
-  count = length(var.oauth2_permission_scopes)
+  for_each = var.oauth2_permission_scopes
 }
 
 locals {
@@ -112,7 +112,7 @@ resource "azuread_application" "adappregistration" {
           enabled = scope.value.enabled
           id      = random_uuid.app_reg_user_impersonation[scope.key].result
           type    = scope.value.type
-          value   = scope.value.value
+          value   = scope.key
         }
       }
     }
