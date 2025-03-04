@@ -213,6 +213,14 @@ variable "oauth2_permission_scopes" {
     type                       = string
     value                      = string
   }))
-  default  = []
+  default = [{
+    admin_consent_display_name = "Access api"
+    admin_consent_description  = "Allow the application to access the api on your behalf."
+    user_consent_description   = "Allow the application to access the api on your behalf."
+    user_consent_display_name  = "Access api"
+    enabled                    = true
+    type                       = "User"
+    value                      = "user_impersonation"
+  }]
   nullable = true
 }
