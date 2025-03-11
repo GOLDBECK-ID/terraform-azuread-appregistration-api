@@ -26,6 +26,41 @@ variables {
   ]
 }
 
+run "with_service_principal" {
+  command = plan
+
+  override_data {
+    target = data.azuread_service_principal.terraform_service_principal
+    values = {
+      object_id = "1234a88b-805d-435f-b1da-45c74574d607"
+    }
+  }
+
+  override_resource {
+    target = azuread_application.adappregistration
+    values = {
+      client_id = "a1b2c3d4-5678-90ab-cdef-1234567890ab"
+      id        = "/applications/a1b2c3d4-5678-90ab-cdef-1234567890ab"
+    }
+  }
+
+  variables {
+    terraformServicePrincipalClientId    = "4321a88b-805d-435f-b1da-45c74574d607"
+    terraformServicePrincipalDisplayName = null #"random sp name"
+    terraformServicePrincipalObjectId    = null #"1234a88b-805d-435f-b1da-45c74574d607"
+  }
+
+  assert {
+    condition     = azuread_application.adappregistration.display_name == "gb-${var.name}-${var.environment}"
+    error_message = "incorrect displayName"
+  }
+
+  assert {
+    condition     = length(azuread_application.adappregistration.owners) > 0 + length(var.owners)
+    error_message = "incorrect count of owners"
+  }
+}
+
 run "general" {
   command = plan
 
@@ -51,6 +86,11 @@ run "general" {
   assert {
     condition     = azuread_application_password.ad_application_password.display_name == "gb-${var.name}-${var.resourceIdentifier}-${var.environment}-secret"
     error_message = "incorrect display name in application password resource."
+  }
+
+  assert {
+    condition     = length(azuread_application.adappregistration.owners) > 0
+    error_message = "incorrect count of owners"
   }
 }
 

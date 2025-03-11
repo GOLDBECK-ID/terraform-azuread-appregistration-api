@@ -29,12 +29,35 @@ variable "resourceIdentifier" {
 variable "owners" {
   description = "IDs of the owner"
   type        = list(string)
-  default     = [""]
   nullable    = false
 }
 
 variable "terraformServicePrincipalObjectId" {
   description = "Service principal object id."
+  type        = string
+  default     = null
+  nullable    = true
+
+  validation {
+    condition = (
+      (var.terraformServicePrincipalObjectId == null && var.terraformServicePrincipalClientId == null && var.terraformServicePrincipalDisplayName == null) ||
+      (var.terraformServicePrincipalObjectId != null && var.terraformServicePrincipalClientId == null && var.terraformServicePrincipalDisplayName == null) ||
+      (var.terraformServicePrincipalObjectId == null && var.terraformServicePrincipalClientId != null && var.terraformServicePrincipalDisplayName == null) ||
+      (var.terraformServicePrincipalObjectId == null && var.terraformServicePrincipalClientId == null && var.terraformServicePrincipalDisplayName != null)
+    )
+    error_message = "Only one of [terraformServicePrincipalObjectId, terraformServicePrincipalClientId, terraformServicePrincipalDisplayName] can be non-null, or all must be null."
+  }
+}
+
+variable "terraformServicePrincipalClientId" {
+  description = "Service principal client id."
+  type        = string
+  default     = null
+  nullable    = true
+}
+
+variable "terraformServicePrincipalDisplayName" {
+  description = "Service principal display name."
   type        = string
   default     = null
   nullable    = true

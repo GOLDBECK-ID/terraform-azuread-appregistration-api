@@ -5,8 +5,10 @@ data "azuread_group" "adgroup" {
 }
 
 data "azuread_service_principal" "terraform_service_principal" {
-  count     = var.terraformServicePrincipalObjectId == null ? 0 : 1
-  object_id = var.terraformServicePrincipalObjectId
+  count        = var.terraformServicePrincipalObjectId == null && var.terraformServicePrincipalClientId == null && var.terraformServicePrincipalDisplayName == null ? 0 : 1
+  object_id    = var.terraformServicePrincipalObjectId
+  client_id    = var.terraformServicePrincipalClientId
+  display_name = var.terraformServicePrincipalDisplayName
 }
 
 resource "random_uuid" "app_role_id" {
