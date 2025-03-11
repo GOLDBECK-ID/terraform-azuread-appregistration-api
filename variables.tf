@@ -33,6 +33,13 @@ variable "owners" {
   nullable    = false
 }
 
+variable "terraformServicePrincipalObjectId" {
+  description = "Service principal object id."
+  type        = string
+  default     = null
+  nullable    = true
+}
+
 variable "sign_in_audience" {
   description = <<EOT
     The Microsoft account types that are supported for the current application.

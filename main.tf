@@ -4,6 +4,11 @@ data "azuread_group" "adgroup" {
   display_name = "AZU_${data.azurerm_subscription.current.display_name}_Contributor"
 }
 
+data "azuread_service_principal" "terraform_service_principal" {
+  count     = var.terraformServicePrincipalObjectId == null ? 0 : 1
+  object_id = var.terraformServicePrincipalObjectId
+}
+
 resource "random_uuid" "app_role_id" {
   for_each = var.app_roles
 }
@@ -31,7 +36,9 @@ resource "azuread_application" "adappregistration" {
     ] : []
   )
 
-  owners                         = var.owners
+  owners = length(data.azuread_service_principal.terraform_service_principal) == 0 ? var.owners : (
+    concat(var.owners, [data.azuread_service_principal.terraform_service_principal[0].object_id])
+  )
   sign_in_audience               = var.sign_in_audience
   group_membership_claims        = var.group_membership_claims
   fallback_public_client_enabled = var.fallback_public_client_enabled
