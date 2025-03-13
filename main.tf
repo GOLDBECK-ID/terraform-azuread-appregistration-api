@@ -5,10 +5,10 @@ data "azuread_group" "adgroup" {
 }
 
 data "azuread_service_principal" "terraform_service_principal" {
-  count        = var.terraformServicePrincipalObjectId == null && var.terraformServicePrincipalClientId == null && var.terraformServicePrincipalDisplayName == null ? 0 : 1
-  object_id    = var.terraformServicePrincipalObjectId
-  client_id    = var.terraformServicePrincipalClientId
-  display_name = var.terraformServicePrincipalDisplayName
+  count        = var.terraform_service_principal_object_id == null && var.terraform_service_principal_client_id == null && var.terraform_service_principal_display_name == null ? 0 : 1
+  object_id    = var.terraform_service_principal_object_id
+  client_id    = var.terraform_service_principal_client_id
+  display_name = var.terraform_service_principal_display_name
 }
 
 resource "random_uuid" "app_role_id" {
@@ -21,14 +21,10 @@ resource "random_uuid" "app_reg_user_impersonation" {
 
 locals {
   app_name = var.display_name == null ? (
-    var.resourceIdentifier == null ? "gb-${var.name}-${var.environment}" : "gb-${var.name}-${var.resourceIdentifier}-${var.environment}"
+    var.resource_identifier == null ? "gb-${var.name}-${var.environment}" : "gb-${var.name}-${var.resource_identifier}-${var.environment}"
   ) : var.display_name
 }
 
-# Manages an application registration within Azure Active Directory.
-# 
-# For a more lightweight alternative, please see the azuread_application_registration resource.
-# Please note that this resource should not be used together with the azuread_application_registration resource when managing the same application.
 resource "azuread_application" "adappregistration" {
   display_name = local.app_name
 
@@ -141,7 +137,6 @@ resource "azuread_application_identifier_uri" "identifier_uri" {
   identifier_uri = var.identifier_uris[count.index]
 }
 
-# Manages a service principal associated with an application within Azure Active Directory.
 resource "azuread_service_principal" "ad_service_principal" {
   client_id                    = azuread_application.adappregistration.client_id
   app_role_assignment_required = var.azuread_service_principal_assignment_required

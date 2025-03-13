@@ -19,7 +19,7 @@ variable "name" {
   nullable    = true
 }
 
-variable "resourceIdentifier" {
+variable "resource_identifier" {
   description = "Identifier of the resource e.g. api, app, or empty."
   type        = string
   default     = null
@@ -32,7 +32,7 @@ variable "owners" {
   nullable    = false
 }
 
-variable "terraformServicePrincipalObjectId" {
+variable "terraform_service_principal_object_id" {
   description = "Service principal object id."
   type        = string
   default     = null
@@ -40,23 +40,23 @@ variable "terraformServicePrincipalObjectId" {
 
   validation {
     condition = (
-      (var.terraformServicePrincipalObjectId == null && var.terraformServicePrincipalClientId == null && var.terraformServicePrincipalDisplayName == null) ||
-      (var.terraformServicePrincipalObjectId != null && var.terraformServicePrincipalClientId == null && var.terraformServicePrincipalDisplayName == null) ||
-      (var.terraformServicePrincipalObjectId == null && var.terraformServicePrincipalClientId != null && var.terraformServicePrincipalDisplayName == null) ||
-      (var.terraformServicePrincipalObjectId == null && var.terraformServicePrincipalClientId == null && var.terraformServicePrincipalDisplayName != null)
+      (var.terraform_service_principal_object_id == null && var.terraform_service_principal_client_id == null && var.terraform_service_principal_display_name == null) ||
+      (var.terraform_service_principal_object_id != null && var.terraform_service_principal_client_id == null && var.terraform_service_principal_display_name == null) ||
+      (var.terraform_service_principal_object_id == null && var.terraform_service_principal_client_id != null && var.terraform_service_principal_display_name == null) ||
+      (var.terraform_service_principal_object_id == null && var.terraform_service_principal_client_id == null && var.terraform_service_principal_display_name != null)
     )
-    error_message = "Only one of [terraformServicePrincipalObjectId, terraformServicePrincipalClientId, terraformServicePrincipalDisplayName] can be non-null, or all must be null."
+    error_message = "Only one of [terraform_service_principal_object_id, terraform_service_principal_client_id, terraform_service_principal_display_name] can be non-null, or all must be null."
   }
 }
 
-variable "terraformServicePrincipalClientId" {
+variable "terraform_service_principal_client_id" {
   description = "Service principal client id."
   type        = string
   default     = null
   nullable    = true
 }
 
-variable "terraformServicePrincipalDisplayName" {
+variable "terraform_service_principal_display_name" {
   description = "Service principal display name."
   type        = string
   default     = null

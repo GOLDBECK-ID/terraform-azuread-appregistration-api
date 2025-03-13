@@ -45,9 +45,9 @@ run "with_service_principal" {
   }
 
   variables {
-    terraformServicePrincipalClientId    = "4321a88b-805d-435f-b1da-45c74574d607"
-    terraformServicePrincipalDisplayName = null #"random sp name"
-    terraformServicePrincipalObjectId    = null #"1234a88b-805d-435f-b1da-45c74574d607"
+    terraform_service_principal_client_id    = "4321a88b-805d-435f-b1da-45c74574d607"
+    terraform_service_principal_display_name = null #"random sp name"
+    terraform_service_principal_object_id    = null #"1234a88b-805d-435f-b1da-45c74574d607"
   }
 
   assert {
@@ -65,26 +65,26 @@ run "general" {
   command = plan
 
   variables {
-    resourceIdentifier = "resourceIdentifier"
+    resource_identifier = "resourceIdentifier"
   }
 
   assert {
-    condition     = output.display_name == "gb-${var.name}-${var.resourceIdentifier}-${var.environment}"
+    condition     = output.display_name == "gb-${var.name}-${var.resource_identifier}-${var.environment}"
     error_message = "incorrect displayName"
   }
 
   assert {
-    condition     = azuread_application.adappregistration.display_name == "gb-${var.name}-${var.resourceIdentifier}-${var.environment}"
+    condition     = azuread_application.adappregistration.display_name == "gb-${var.name}-${var.resource_identifier}-${var.environment}"
     error_message = "incorrect displayName"
   }
 
   assert {
-    condition     = azuread_application_password.ad_application_password.display_name != "gb-${var.name}-${var.resourceIdentifier}-${var.environment}"
+    condition     = azuread_application_password.ad_application_password.display_name != "gb-${var.name}-${var.resource_identifier}-${var.environment}"
     error_message = "incorrect display name in application password resource."
   }
 
   assert {
-    condition     = azuread_application_password.ad_application_password.display_name == "gb-${var.name}-${var.resourceIdentifier}-${var.environment}-secret"
+    condition     = azuread_application_password.ad_application_password.display_name == "gb-${var.name}-${var.resource_identifier}-${var.environment}-secret"
     error_message = "incorrect display name in application password resource."
   }
 
@@ -107,9 +107,9 @@ run "display_name" {
   command = plan
 
   variables {
-    display_name       = "display_name"
-    name               = "name"
-    resourceIdentifier = "resourceIdentifier"
+    display_name        = "display_name"
+    name                = "name"
+    resource_identifier = "resourceIdentifier"
   }
 
   assert {
@@ -118,7 +118,7 @@ run "display_name" {
   }
 
   assert {
-    condition     = output.display_name != "gb-${var.name}-${var.resourceIdentifier}-${var.environment}"
+    condition     = output.display_name != "gb-${var.name}-${var.resource_identifier}-${var.environment}"
     error_message = "incorrect displayName"
   }
 }
