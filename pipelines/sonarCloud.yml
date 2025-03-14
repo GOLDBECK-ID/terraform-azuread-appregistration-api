@@ -2,14 +2,7 @@ parameters:
   - name: templateVersion
     displayName: Version tag of the used templates
     type: string
-    default: 0.0.10
-  - name: jdkVersion
-    displayName: JDK Version Number [LTS 17]
-    type: string
-    default: 17
-    values:
-      - 17
-      - 21 #scheduled for release on September 19, 2023
+    default: 0.1
   - name: sonarCloudProjectName
     displayName: Project Name [terraform-azuread-appregistration-api]
     type: string
@@ -28,13 +21,11 @@ resources:
   - repository: templates
     name: Pipeline-Templates/pipeline-template-sonarCloud
     type: git
-    ref: refs/tags/0.0.10
+    ref: refs/tags/${{ parameters.templateVersion }}
 
 name: $(date:yyyyMMdd)$(rev:.r)
 
 steps:
   - template: terraform.yml@templates
     parameters:
-      jdkVersion: 17
-      sonarCloudProjectName: terraform-azuread-appregistration-api
-      sonarCloudEndpointName: SonarCloud
+      sonarCloudProjectName: ${{ parameters.sonarCloudProjectName }}
