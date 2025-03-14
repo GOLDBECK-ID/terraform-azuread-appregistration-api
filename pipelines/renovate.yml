@@ -3,8 +3,7 @@ schedules:
   displayName: Scheduler # friendly name given to a specific schedule
   branches:
     include:
-    - main
-    - master
+    - dev
   always: true # whether to always run the pipeline or only if there have been source code changes since the last successful scheduled run. The default is false.
 
 trigger: none
@@ -13,7 +12,7 @@ parameters:
   - name: templateVersion
     displayName: Version tag of the used templates
     type: string
-    default: 0.0.8
+    default: 1.0
 
 pool:
   vmImage: ubuntu-latest
@@ -38,4 +37,4 @@ steps:
     parameters:
       githubComToken: "$(GITHUB_COM_TOKEN)"
       autoApprovePatch: true
-      # autoMergePatch: true
+      autoMergePatch: true
