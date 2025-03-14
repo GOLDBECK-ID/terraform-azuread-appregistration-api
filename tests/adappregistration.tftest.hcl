@@ -5,15 +5,14 @@ variables {
   name        = "name"
   environment = "environment"
   owners      = ["8673a88b-805d-435f-b1da-45c74574d607"]
-  app_roles = [
-    {
+  app_roles = {
+    "user_impersonation" = {
       allowed_member_types = ["User"]
       description          = "User impersonation"
       display_name         = "User impersonation"
-      value                = "user_impersonation"
       enabled              = true
     }
-  ]
+  }
   required_resource_access = [
     {
       resource_app_id = "some-id"
@@ -27,31 +26,100 @@ variables {
   ]
 }
 
+run "with_service_principal" {
+  command = plan
+
+  override_data {
+    target = data.azuread_service_principal.terraform_service_principal
+    values = {
+      object_id = "1234a88b-805d-435f-b1da-45c74574d607"
+    }
+  }
+
+  override_resource {
+    target = azuread_application.adappregistration
+    values = {
+      client_id = "a1b2c3d4-5678-90ab-cdef-1234567890ab"
+      id        = "/applications/a1b2c3d4-5678-90ab-cdef-1234567890ab"
+    }
+  }
+
+  variables {
+    terraform_service_principal_client_id    = "4321a88b-805d-435f-b1da-45c74574d607"
+    terraform_service_principal_display_name = null #"random sp name"
+    terraform_service_principal_object_id    = null #"1234a88b-805d-435f-b1da-45c74574d607"
+  }
+
+  assert {
+    condition     = azuread_application.adappregistration.display_name == "gb-${var.name}-${var.environment}"
+    error_message = "incorrect displayName"
+  }
+
+  assert {
+    condition     = length(azuread_application.adappregistration.owners) > 0 + length(var.owners)
+    error_message = "incorrect count of owners"
+  }
+}
+
 run "general" {
   command = plan
 
   variables {
-    resourceIdentifier = "resourceIdentifier"
+    resource_identifier = "resourceIdentifier"
   }
 
   assert {
-    condition     = output.display_name == "gb-${var.name}-${var.resourceIdentifier}-${var.environment}"
+    condition     = output.display_name == "gb-${var.name}-${var.resource_identifier}-${var.environment}"
     error_message = "incorrect displayName"
   }
 
   assert {
-    condition     = azuread_application.adappregistration.display_name == "gb-${var.name}-${var.resourceIdentifier}-${var.environment}"
+    condition     = azuread_application.adappregistration.display_name == "gb-${var.name}-${var.resource_identifier}-${var.environment}"
     error_message = "incorrect displayName"
   }
 
   assert {
-    condition     = azuread_application_password.ad_application_password.display_name != "gb-${var.name}-${var.resourceIdentifier}-${var.environment}"
+    condition     = azuread_application_password.ad_application_password.display_name != "gb-${var.name}-${var.resource_identifier}-${var.environment}"
     error_message = "incorrect display name in application password resource."
   }
 
   assert {
-    condition     = azuread_application_password.ad_application_password.display_name == "gb-${var.name}-${var.resourceIdentifier}-${var.environment}-secret"
+    condition     = azuread_application_password.ad_application_password.display_name == "gb-${var.name}-${var.resource_identifier}-${var.environment}-secret"
     error_message = "incorrect display name in application password resource."
+  }
+
+  assert {
+    condition     = length(azuread_application.adappregistration.owners) > 0
+    error_message = "incorrect count of owners"
+  }
+}
+
+run "empty_identifier" {
+  command = plan
+
+  assert {
+    condition     = azuread_application.adappregistration.display_name == "gb-${var.name}-${var.environment}"
+    error_message = "incorrect displayName"
+  }
+}
+
+run "display_name" {
+  command = plan
+
+  variables {
+    display_name        = "display_name"
+    name                = "name"
+    resource_identifier = "resourceIdentifier"
+  }
+
+  assert {
+    condition     = azuread_application.adappregistration.display_name == "display_name"
+    error_message = "incorrect displayName"
+  }
+
+  assert {
+    condition     = output.display_name != "gb-${var.name}-${var.resource_identifier}-${var.environment}"
+    error_message = "incorrect displayName"
   }
 }
 
@@ -60,7 +128,15 @@ run "api" {
 
   variables {
     authorized_app_id = "8673a88b-805d-435f-b1da-45c74574d607"
-    web_redirect_uris = ["https://some-url.com/, https://some-url.com"]
+    web = {
+      homepage_url = "https://some-url.com"
+      implicit_grant = {
+        access_token_issuance_enabled = true
+        id_token_issuance_enabled     = true
+      }
+      logout_url    = "https://some-url.com"
+      redirect_uris = ["https://some-url.com/, https://some-url.com"]
+    }
   }
 
   assert {
@@ -70,7 +146,7 @@ run "api" {
 
   assert {
     condition     = length(azuread_application.adappregistration.web) > 0
-    error_message = "With var.web_redirect_uris there are a web block. Current length is: ${length(azuread_application.adappregistration.web)}"
+    error_message = "With var.web.redirect_uris there are a web block. Current length is: ${length(azuread_application.adappregistration.web)}"
   }
 }
 
@@ -87,16 +163,35 @@ run "app" {
   }
 
   assert {
-    condition     = length(azuread_application.adappregistration.web) > 0
-    error_message = "With var.web_redirect_uris there are a web block. Current length is: ${length(azuread_application.adappregistration.web)}"
+    condition     = length(azuread_application.adappregistration.web) == 0
+    error_message = "With var.web.redirect_uris there are a web block. Current length is: ${length(azuread_application.adappregistration.web)}"
   }
 }
 
-run "empty_identifier" {
+run "identifier_uri_id" {
   command = plan
 
+  variables {
+    identifier_uris          = ["api://some-uri"]
+    identifier_uri_with_name = false
+  }
+
   assert {
-    condition     = azuread_application.adappregistration.display_name == "gb-${var.name}-${var.environment}"
-    error_message = "incorrect displayName"
+    condition     = length(azuread_application.adappregistration.identifier_uris) == 0
+    error_message = "Identifier uri is not needed."
+  }
+}
+
+run "identifier_uri_uris" {
+  command = plan
+
+  variables {
+    identifier_uris          = ["api://some-uri"]
+    identifier_uri_with_name = true
+  }
+
+  assert {
+    condition     = length(azuread_application.adappregistration.identifier_uris) > 0
+    error_message = "Identifier uri is needed."
   }
 }

@@ -37,8 +37,17 @@ output "identifier_uris" {
   value       = azuread_application.adappregistration.identifier_uris
 }
 
-output "permission_scope_ids" {
+output "oauth2_permission_scope_ids" {
   description = "A mapping of OAuth2.0 permission scope values to scope IDs, intended to be useful when referencing permission scopes in other resources in your configuration."
   value       = azuread_application.adappregistration.oauth2_permission_scope_ids
 }
 
+output "app_role_ids" {
+  description = "A mapping of App Role values to role IDs, intended to be useful when referencing app roles in other resources in your configuration."
+  value       = azuread_application.adappregistration.app_role_ids
+}
+
+output "publisher_domain" {
+  description = "The verified publisher domain of the application."
+  value       = azuread_application.adappregistration.publisher_domain
+}
