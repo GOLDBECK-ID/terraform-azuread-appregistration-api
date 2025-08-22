@@ -161,6 +161,10 @@ resource "azuread_application_password" "ad_application_password" {
       display_name
     ]
   }
+
+  depends_on = [
+    time_rotating.expiration_date
+  ]
 }
 
 resource "random_uuid" "app_reg_pre_authorized" {
