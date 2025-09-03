@@ -161,20 +161,24 @@ resource "azuread_application_password" "ad_application_password" {
       display_name
     ]
   }
+
+  depends_on = [
+    time_rotating.expiration_date
+  ]
 }
 
-resource "random_uuid" "app_reg_pre_authorized" {
-  count = var.authorized_app_id == null ? 0 : 1
-}
+# resource "random_uuid" "app_reg_pre_authorized" {
+#   count = var.authorized_app_id == null ? 0 : 1
+# }
 
 resource "azuread_application_pre_authorized" "pre_authorized_clients" {
-  count = length(random_uuid.app_reg_pre_authorized)
+  for_each = var.oauth2_permission_scopes #Besser nicht for_each, sondern ids in array umwandeln
 
   application_id       = azuread_application.adappregistration.id
   authorized_client_id = var.authorized_app_id
   permission_ids = [
-    random_uuid.app_reg_pre_authorized[count.index].result
+    random_uuid.app_reg_user_impersonation[each.key].result
   ]
 
-  depends_on = [random_uuid.app_reg_pre_authorized]
+  depends_on = [random_uuid.app_reg_user_impersonation]
 }
