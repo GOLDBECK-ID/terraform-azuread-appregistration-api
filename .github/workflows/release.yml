@@ -1,0 +1,52 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Get latest tag
+        id: get_tag
+        run: |
+          git fetch --tags
+          TAG=$(git tag --sort=-v:refname | head -n 1)
+          echo "latest_tag=${TAG:-0.0.0}" >> $GITHUB_OUTPUT
+
+      - name: Bump version
+        id: bump_version
+        run: |
+          IFS='.' read -r MAJOR MINOR PATCH <<< "${{ steps.get_tag.outputs.latest_tag }}"
+          # MINOR=$((MINOR+1))
+          PATCH=$((PATCH+1))
+          NEW_TAG="$MAJOR.$MINOR.$PATCH"
+          echo "new_tag=$NEW_TAG" >> $GITHUB_OUTPUT
+
+      - name: Create tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git tag ${{ steps.bump_version.outputs.new_tag }}
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} ${{ steps.bump_version.outputs.new_tag }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.bump_version.outputs.new_tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
