@@ -173,7 +173,7 @@ resource "azuread_application_pre_authorized" "pre_authorized_clients" {
   application_id       = azuread_application.adappregistration.id
   authorized_client_id = var.authorized_app_id
   permission_ids = [
-    random_uuid.app_reg_user_impersonation[*].result
+    for key in random_uuid.app_reg_user_impersonation : key.result
   ]
 
   depends_on = [random_uuid.app_reg_user_impersonation]
