@@ -2,9 +2,10 @@ mock_provider "azuread" {}
 mock_provider "azurerm" {}
 
 variables {
-  name        = "name"
-  environment = "environment"
-  owners      = ["8673a88b-805d-435f-b1da-45c74574d607"]
+  name              = "name"
+  environment       = "environment"
+  owners            = ["8673a88b-805d-435f-b1da-45c74574d607"]
+  authorized_app_id = "8673a88b-805d-435f-b1da-45c74574d607"
   app_roles = {
     "user_impersonation" = {
       allowed_member_types = ["User"]
