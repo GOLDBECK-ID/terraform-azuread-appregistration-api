@@ -168,6 +168,10 @@ resource "azuread_application_password" "ad_application_password" {
 }
 
 resource "azuread_application_pre_authorized" "pre_authorized_clients" {
+  count = var.authorized_app_id == null ? 0 : (
+    length(random_uuid.oauth2_permission_scopes) == 0 ? 0 : 1
+  )
+
   application_id       = azuread_application.adappregistration.id
   authorized_client_id = var.authorized_app_id
 
