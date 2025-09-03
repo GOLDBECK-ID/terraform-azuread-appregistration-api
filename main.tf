@@ -15,7 +15,7 @@ resource "random_uuid" "app_role_id" {
   for_each = var.app_roles
 }
 
-resource "random_uuid" "app_reg_user_impersonation" {
+resource "random_uuid" "oauth2_permission_scopes" {
   for_each = var.oauth2_permission_scopes
 }
 
@@ -115,7 +115,7 @@ resource "azuread_application" "adappregistration" {
           user_consent_display_name  = scope.value.user_consent_display_name
 
           enabled = scope.value.enabled
-          id      = random_uuid.app_reg_user_impersonation[scope.key].result
+          id      = random_uuid.oauth2_permission_scopes[scope.key].result
           type    = scope.value.type
           value   = scope.key
         }
@@ -172,11 +172,11 @@ resource "azuread_application_pre_authorized" "pre_authorized_clients" {
   authorized_client_id = var.authorized_app_id
 
   permission_ids = [
-    for key in random_uuid.app_reg_user_impersonation : key.result
+    for key in random_uuid.oauth2_permission_scopes : key.result
   ]
 
   depends_on = [
     azuread_application.adappregistration,
-    random_uuid.app_reg_user_impersonation
+    random_uuid.oauth2_permission_scopes
   ]
 }
