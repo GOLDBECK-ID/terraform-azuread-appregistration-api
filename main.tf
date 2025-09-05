@@ -28,6 +28,8 @@ locals {
 resource "azuread_application" "adappregistration" {
   display_name = local.app_name
 
+  notes = var.notes
+
   identifier_uris = var.is_frontend ? [] : (
     var.identifier_uri_with_name ? [
       "api://${lower(local.app_name)}.azurewebsites.net"
@@ -141,6 +143,8 @@ resource "azuread_service_principal" "ad_service_principal" {
   client_id                    = azuread_application.adappregistration.client_id
   app_role_assignment_required = var.azuread_service_principal_assignment_required
   owners                       = var.owners
+
+  notes = var.notes
 }
 
 resource "time_rotating" "expiration_date" {
